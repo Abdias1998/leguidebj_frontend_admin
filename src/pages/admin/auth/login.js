@@ -42,7 +42,7 @@ const Page = () => {
         router.push("/admin/dashboard");
       } catch (err) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.message });
+        helpers.setErrors({ submit: err.response.data.message });
         helpers.setSubmitting(false);
       }
     },
