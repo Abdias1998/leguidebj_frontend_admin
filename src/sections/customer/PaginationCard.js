@@ -25,7 +25,7 @@ import {
 import axios from "axios";
 import { requete } from "src/env/requete";
 import { Scrollbar } from "src/components/scrollbar";
-import ReactPlayer from "react-player";
+
 import { Container } from "@mui/system";
 import VideoPlayer from "./customer-modified-video";
 
