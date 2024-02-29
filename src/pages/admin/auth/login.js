@@ -82,7 +82,7 @@ const Page = () => {
           <div>
             <Stack spacing={1} sx={{ mb: 3 }}>
               <Typography color="text.secondary" variant="body2">
-                <Typography variant="h4">Connexion</Typography>
+                <Typography variant="h4">Connexion au compte Admin</Typography>
                 {/* Don&apos;t have an account? &nbsp;
                 <Link
                   component={NextLink}
