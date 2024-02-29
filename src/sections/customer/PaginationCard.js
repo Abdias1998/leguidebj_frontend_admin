@@ -72,13 +72,15 @@ const PaginationPage = () => {
   // Composant de formulaire de modification
   const EditVideoForm = () => {
     const [formData, setFormData] = useState({
-      title: videoToEdit?.title || "",
+      firstName: videoToEdit?.firstName || "",
+      lastName: videoToEdit?.lastName || "",
+      email: videoToEdit?.email || "",
+      tel: videoToEdit?.tel || "",
       description: videoToEdit?.description || "",
-      director: videoToEdit?.director || "",
-      duration: videoToEdit?.duration || "",
-      releaseYear: videoToEdit?.releaseYear || "",
-      keywords: videoToEdit?.keywords || "",
-      genre: videoToEdit?.genre || "",
+      country: videoToEdit?.country || "",
+      zone: videoToEdit?.zone || "",
+      language: videoToEdit?.language || "",
+
       // Ajoutez ici d'autres champs de formulaire
     });
 
@@ -91,7 +93,10 @@ const PaginationPage = () => {
       e.preventDefault();
       try {
         // Envoyer une requête de modification avec les données de formData
-        const response = await axios.put(`${requete.video}/update/${videoToEdit._id}`, formData);
+        const response = await axios.put(
+          `${requete.admin}/update_guide/${videoToEdit._id}`,
+          formData
+        );
 
         if (response.status === 200) {
           // Modification réussie
@@ -112,9 +117,19 @@ const PaginationPage = () => {
             <TextField
               fullWidth
               variant="outlined"
-              label="Title"
-              name="title"
-              value={formData.title}
+              label="Nom"
+              name="firstName"
+              value={formData.firstName}
+              onChange={handleChange}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Prénom"
+              name="lastName"
+              value={formData.lastName}
               onChange={handleChange}
             />
           </Grid>
@@ -126,15 +141,16 @@ const PaginationPage = () => {
               name="description"
               value={formData.description}
               onChange={handleChange}
+              row={4}
             />
           </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
               variant="outlined"
-              label="Director"
-              name="director"
-              value={formData.director}
+              label="Email"
+              name="email"
+              value={formData.email}
               onChange={handleChange}
             />
           </Grid>
@@ -142,9 +158,9 @@ const PaginationPage = () => {
             <TextField
               fullWidth
               variant="outlined"
-              label="Duration"
-              name="duration"
-              value={formData.duration}
+              label="Téléphone"
+              name="tel"
+              value={formData.tel}
               onChange={handleChange}
             />
           </Grid>
@@ -152,9 +168,9 @@ const PaginationPage = () => {
             <TextField
               fullWidth
               variant="outlined"
-              label="Release Year"
-              name="releaseYear"
-              value={formData.releaseYear}
+              label="Pays"
+              name="country"
+              value={formData.country}
               onChange={handleChange}
             />
           </Grid>
@@ -162,9 +178,9 @@ const PaginationPage = () => {
             <TextField
               fullWidth
               variant="outlined"
-              label="Mots clés"
-              name="keywords"
-              value={formData.keywords}
+              label="Zone touristique"
+              name="zone"
+              value={formData.zone}
               onChange={handleChange}
             />
           </Grid>
@@ -172,12 +188,13 @@ const PaginationPage = () => {
             <TextField
               fullWidth
               variant="outlined"
-              label="Genre"
-              name="genre"
-              value={formData.genre}
+              label="Langue"
+              name="language"
+              value={formData.language}
               onChange={handleChange}
             />
           </Grid>
+
           {/* Ajoutez ici d'autres champs de formulaire */}
           <Grid item xs={12}>
             <Button variant="contained" color="primary" type="submit">
@@ -195,7 +212,7 @@ const PaginationPage = () => {
 
   const getVideo = async () => {
     try {
-      const res = await axios.get(`${requete.video}/read`);
+      const res = await axios.get(`${requete.admin}/get_all_guides`);
       setData(res.data);
       setFilteredData(res.data);
       setInfoMessage("Requête réussie !");
@@ -229,8 +246,8 @@ const PaginationPage = () => {
     setSearchTerm(searchValue);
 
     const filtered = data.filter((item) => {
-      if (item.keywords && typeof item.keywords === "string") {
-        return item.keywords.toLowerCase().includes(searchValue.toLowerCase());
+      if (item.zone && typeof item.zone === "string") {
+        return item.zone.toLowerCase().includes(searchValue.toLowerCase());
       }
       return false;
     });
@@ -248,7 +265,7 @@ const PaginationPage = () => {
     if (videoToDelete) {
       try {
         // Envoyer une requête de suppression
-        const response = await axios.delete(`${requete.video}/delete/${videoToDelete._id}`);
+        const response = await axios.delete(`${requete.admin}/delete_guide/${videoToDelete._id}`);
 
         if (response.status === 200) {
           // Suppression réussie
@@ -280,14 +297,14 @@ const PaginationPage = () => {
 
   return (
     <div>
-      <h1>Pagination Example</h1>
-      <VideoPlayer />
+      <h1>Pagination </h1>
+      {/* <VideoPlayer /> */}
       <Card sx={{ p: 2 }}>
         <OutlinedInput
           fullWidth
           value={searchTerm}
           onChange={handleSearch}
-          placeholder="Search customer (title or genre)"
+          placeholder="Rechercher Guide (title or genre)"
           startAdornment={
             <InputAdornment position="start">
               <SvgIcon color="action" fontSize="small">
@@ -298,7 +315,7 @@ const PaginationPage = () => {
           sx={{ maxWidth: 500, marginRight: 2 }}
         />
         <Button variant="contained" onClick={getVideo}>
-          Search
+          Recherche
         </Button>
       </Card>
       <Scrollbar>
@@ -307,15 +324,15 @@ const PaginationPage = () => {
             <TableHead>
               <TableRow>
                 <TableCell>Id</TableCell>
-                <TableCell>Delete</TableCell>
-                <TableCell>Edite</TableCell>
-                <TableCell>Title</TableCell>
-                <TableCell>Des</TableCell>
-                <TableCell>Director</TableCell>
-                <TableCell>Durée/Année</TableCell>
-                <TableCell>Ratings/comments</TableCell>
-                <TableCell>Lien video url</TableCell>
-                <TableCell>Lien cover url</TableCell>
+                <TableCell>Supprimer</TableCell>
+                <TableCell>Modifier</TableCell>
+                <TableCell>names</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Tel</TableCell>
+                <TableCell>Pays</TableCell>
+                <TableCell>Language</TableCell>
+                <TableCell>Zone</TableCell>
+                <TableCell>Description</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -328,22 +345,22 @@ const PaginationPage = () => {
                       onClick={() => handleDeleteVideo(item)}
                       color="error"
                     >
-                      Delete
+                      Supprimer
                     </Button>
                   </TableCell>
                   <TableCell>
                     <Button variant="contained" onClick={() => handleEditVideo(item)} color="info">
-                      Edit
+                      Modifier
                     </Button>
                   </TableCell>
 
-                  <TableCell>{item.title}</TableCell>
+                  <TableCell>{item.names}</TableCell>
+                  <TableCell>{item.email}</TableCell>
+                  <TableCell>{`${item.tel}`}</TableCell>
+                  <TableCell>{`${item.country}`}</TableCell>
+                  <TableCell>{item.language}</TableCell>
+                  <TableCell>{item.zone}</TableCell>
                   <TableCell>{truncate(item.description, 50)}</TableCell>
-                  <TableCell>{item.director}</TableCell>
-                  <TableCell>{`${item.duration}min/ ${item.releaseYear}`}</TableCell>
-                  <TableCell>{`${item.ratings?.length}note/ ${item.comments?.length}comments`}</TableCell>
-                  <TableCell>{item.videoUrl}</TableCell>
-                  <TableCell>{item.coverImage}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -363,7 +380,7 @@ const PaginationPage = () => {
       {/* Modal pour la confirmation de suppression */}
       <Dialog open={isDeleteModalOpen} onClose={cancelDelete}>
         <DialogTitle>Confirmer la suppression</DialogTitle>
-        <DialogContent>Êtes-vous sûr de vouloir supprimer cette vidéo ?</DialogContent>
+        <DialogContent>Êtes-vous sûr de vouloir supprimer ce guide ?</DialogContent>
         <DialogActions>
           <Button onClick={cancelDelete} color="primary">
             Cancel
@@ -386,7 +403,7 @@ const PaginationPage = () => {
       </Dialog>
 
       <Dialog open={isEditModalOpen} onClose={() => setIsEditModalOpen(false)}>
-        <DialogTitle>Modifier la vidéo</DialogTitle>
+        <DialogTitle>Modifier les infos du guide </DialogTitle>
         <DialogContent>
           <EditVideoForm />
         </DialogContent>

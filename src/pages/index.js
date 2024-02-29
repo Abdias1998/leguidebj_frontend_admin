@@ -1,4 +1,8 @@
 import Head from "next/head";
+import NextLink from "next/link";
+import ArrowLeftIcon from "@heroicons/react/24/solid/ArrowLeftIcon";
+import { Button, SvgIcon, Typography } from "@mui/material";
+
 import { subDays, subHours } from "date-fns";
 import { Box, Container, Unstable_Grid2 as Grid } from "@mui/material";
 import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
@@ -25,146 +29,64 @@ const now = new Date();
 const Page = () => (
   <>
     <Head>
-      <title>Overview | LE GUIDE BJ</title>
+      <title>Accueil | LE GUIDE BJ</title>
     </Head>
     <Box
       component="main"
       sx={{
+        alignItems: "center",
+        display: "flex",
         flexGrow: 1,
-        py: 8,
+        minHeight: "100%",
       }}
     >
-      <Container maxWidth="xl">
-        <Grid container spacing={3}>
-          {/* <Grid
-            xs={12}
-            sm={6}
-            lg={3}
+      <Container maxWidth="md">
+        <Box
+          sx={{
+            alignItems: "center",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          <Box
+            sx={{
+              mb: 3,
+              textAlign: "center",
+            }}
           >
-            <OverviewBudget
-              difference={12}
-              positive
-              sx={{ height: '100%' }}
-              value="$24k"
+            <img
+              alt="Under development"
+              src="/assets/errors/error-404.png"
+              style={{
+                display: "inline-block",
+                maxWidth: "100%",
+                width: 400,
+              }}
             />
-          </Grid> */}
-
-          {/* <Grid
-            xs={12}
-            sm={6}
-            lg={3}
+          </Box>
+          <Typography align="center" sx={{ mb: 3 }} variant="h3">
+            404: La plateforme est en developpement
+          </Typography>
+          <Typography align="center" color="text.secondary" variant="body1">
+            La page que vous avez démandé est en maintenance
+          </Typography>
+          <Button
+            component={NextLink}
+            href="/admin/auth/login"
+            startIcon={
+              <SvgIcon fontSize="small">
+                <ArrowLeftIcon />
+              </SvgIcon>
+            }
+            sx={{ mt: 3 }}
+            variant="contained"
           >
-            <OverviewTotalCustomers
-              difference={16}
-              positive={false}
-              sx={{ height: '100%' }}
-              value="1.6k"
-            />
-          </Grid> */}
-
-          {/* <Grid
-            xs={12}
-            sm={6}
-            lg={3}
-          >
-            <OverviewTasksProgress
-              sx={{ height: '100%' }}
-              value={75.5}
-            />
-          </Grid> */}
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalUsers sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalVideos sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalAdmin sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalManager sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalBannie sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalSignal sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalComment sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-          <Grid xs={12} sm={6} lg={3}>
-            <OverviewTotalRatings sx={{ height: "100%" }} value="$15k" />
-          </Grid>
-
-          <Grid xs={12} lg={8}>
-            <OverviewSales
-              chartSeries={[
-                {
-                  name: "This year",
-                  data: [18, 16, 5, 8, 3, 14, 14, 16, 17, 19, 18, 20],
-                },
-                {
-                  name: "Last year",
-                  data: [12, 11, 4, 6, 2, 9, 9, 10, 11, 12, 13, 13],
-                },
-              ]}
-              sx={{ height: "100%" }}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={4}>
-            <OverviewTraffic
-              chartSeries={[1, 15, 22]}
-              labels={["Desktop", "Tablet", "Phone"]}
-              sx={{ height: "100%" }}
-            />
-          </Grid>
-          <Grid xs={12} md={6} lg={4}>
-            <OverviewLatestProducts
-              products={[
-                {
-                  id: "5ece2c077e39da27658aa8a9",
-                  image: "/assets/products/product-1.png",
-                  name: "Healthcare Erbology",
-                  updatedAt: subHours(now, 6).getTime(),
-                },
-                {
-                  id: "5ece2c0d16f70bff2cf86cd8",
-                  image: "/assets/products/product-2.png",
-                  name: "Makeup Lancome Rouge",
-                  updatedAt: subDays(subHours(now, 8), 2).getTime(),
-                },
-                {
-                  id: "b393ce1b09c1254c3a92c827",
-                  image: "/assets/products/product-5.png",
-                  name: "Skincare Soja CO",
-                  updatedAt: subDays(subHours(now, 1), 1).getTime(),
-                },
-                {
-                  id: "a6ede15670da63f49f752c89",
-                  image: "/assets/products/product-6.png",
-                  name: "Makeup Lipstick",
-                  updatedAt: subDays(subHours(now, 3), 3).getTime(),
-                },
-                {
-                  id: "bcad5524fe3a2f8f8620ceda",
-                  image: "/assets/products/product-7.png",
-                  name: "Healthcare Ritual",
-                  updatedAt: subDays(subHours(now, 5), 6).getTime(),
-                },
-              ]}
-              sx={{ height: "100%" }}
-            />
-          </Grid>
-          <Grid xs={12} md={12} lg={8}>
-            <OverviewLatestOrders sx={{ height: "100%" }} />
-          </Grid>
-        </Grid>
+            Aller à la page de connexion
+          </Button>
+        </Box>
       </Container>
     </Box>
   </>
 );
-
-Page.getLayout = (page) => <DashboardLayout>{page}</DashboardLayout>;
 
 export default Page;

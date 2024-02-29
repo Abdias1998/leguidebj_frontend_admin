@@ -19,9 +19,9 @@ export function createPalette() {
     divider: "#F2F4F7",
     error,
     info,
-    mode: "light",
+    mode: "dark",
     neutral,
-    primary: indigo,
+    primary: info,
     success,
     text: {
       primary: neutral[900],

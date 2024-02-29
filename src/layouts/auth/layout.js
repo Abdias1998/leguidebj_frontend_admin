@@ -16,7 +16,7 @@ export const Layout = (props) => {
         flex: "1 1 auto",
       }}
     >
-      <Grid container sx={{ flex: "1 1 auto" }}>
+      {/* <Grid container sx={{ flex: "1 1 auto" }}>
         <Grid
           xs={12}
           lg={6}
@@ -26,32 +26,32 @@ export const Layout = (props) => {
             flexDirection: "column",
             position: "relative",
           }}
+        > */}
+      <Box
+        component="header"
+        sx={{
+          left: 0,
+          p: 3,
+          position: "fixed",
+          top: 0,
+          width: "100%",
+        }}
+      >
+        <Box
+          component={NextLink}
+          href="/admin/dashboard"
+          sx={{
+            display: "inline-flex",
+            height: 32,
+            width: 32,
+          }}
         >
-          <Box
-            component="header"
-            sx={{
-              left: 0,
-              p: 3,
-              position: "fixed",
-              top: 0,
-              width: "100%",
-            }}
-          >
-            <Box
-              component={NextLink}
-              href="/"
-              sx={{
-                display: "inline-flex",
-                height: 32,
-                width: 32,
-              }}
-            >
-              <Logo />
-            </Box>
-          </Box>
-          {children}
-        </Grid>
-        <Grid
+          <Logo />
+        </Box>
+      </Box>
+      {children}
+      {/* </Grid> */}
+      {/* <Grid
           xs={12}
           lg={6}
           sx={{
@@ -84,8 +84,8 @@ export const Layout = (props) => {
             <Typography align="center" sx={{ mb: 3 }} variant="subtitle1"></Typography>
             <img alt="logo LE GUIDE BJ" src="/assets/logos/logo.jpg" />
           </Box>
-        </Grid>
-      </Grid>
+        </Grid> */}
+      {/* </Grid> */}
     </Box>
   );
 };

@@ -218,14 +218,14 @@ const Page = () => {
     setRowsPerPage(event.target.value);
   }, []);
   const [formData, setFormData] = useState({
-    title: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    tel: "",
+    zone: "",
+    country: "",
     description: "",
-    genre: "",
-    releaseYear: "",
-    director: "",
-    keywords: "",
-    duration: "",
-    videoFile: null,
+    document: null,
     // imageFile: null,
   });
 
@@ -255,7 +255,7 @@ const Page = () => {
 
     try {
       // Utilisez Axios pour envoyer les données au serveur
-      const response = await axios.post(`${requete.video}/create`, form, {
+      const response = await axios.post(`${requete.admin}/register_guide`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 
@@ -276,7 +276,7 @@ const Page = () => {
   return (
     <>
       <Head>
-        <title>Customers | Devias Kit</title>
+        <title>Les Guides | Le Guide BJ</title>
       </Head>
       <Box
         component="main"
@@ -289,7 +289,7 @@ const Page = () => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Customers</Typography>
+                <Typography variant="h4">Liste des Guides</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
@@ -349,9 +349,64 @@ const Page = () => {
                 <Grid item xs={12}>
                   <TextField
                     fullWidth
-                    label="Title"
-                    name="title"
-                    value={formData.title}
+                    label="Nom"
+                    name="firstName"
+                    value={formData.firstName}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Prénom"
+                    name="lastName"
+                    value={formData.lastName}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Tel"
+                    name="tel"
+                    value={formData.tel}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Pays"
+                    name="country"
+                    value={formData.country}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Zone touristique"
+                    name="zone"
+                    value={formData.zone}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Language"
+                    name="language"
+                    value={formData.language}
                     onChange={handleInputChange}
                   />
                 </Grid>
@@ -367,64 +422,10 @@ const Page = () => {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Genre"
-                    name="genre"
-                    value={formData.genre}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Release Year"
-                    name="releaseYear"
-                    value={formData.releaseYear}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Director"
-                    name="director"
-                    value={formData.director}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                {/* <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Cast"
-                    name="cast"
-                    value={formData.cast}
-                    onChange={handleInputChange}
-                  />
-                </Grid> */}
-                <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Duration"
-                    name="duration"
-                    value={formData.duration}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Mots clés"
-                    name="keywords"
-                    value={formData.keywords}
-                    onChange={handleInputChange}
-                  />
-                </Grid>
-                <Grid item xs={6}>
                   <input
                     type="file"
                     accept="image/*,video/*"
-                    name="videoFile"
+                    name="document"
                     onChange={handleFileChange}
                     multiple
                   />
@@ -439,7 +440,7 @@ const Page = () => {
                 </Grid> */}
                 <Grid item xs={12}>
                   <Button type="submit" variant="contained" color="primary">
-                    Create Video
+                    Créer un guide
                   </Button>
                 </Grid>
               </Grid>
@@ -457,9 +458,7 @@ const Page = () => {
             </Dialog>{" "}
           </Container>
           <br /> <br />
-          <div>
-            <CoverImageForm />
-          </div>
+          <div>{/* <CoverImageForm /> */}</div>
         </Container>
       </Box>
     </>

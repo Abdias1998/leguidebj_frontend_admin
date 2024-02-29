@@ -17,12 +17,14 @@ import { Logo } from "src/components/logo";
 import { Scrollbar } from "src/components/scrollbar";
 import { items } from "./config";
 import { SideNavItem } from "./side-nav-item";
+import { useAuthContext } from "src/contexts/auth-context";
 
 export const SideNav = (props) => {
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
-
+  const authContext = useAuthContext();
+  const user = authContext.user;
   const content = (
     <Scrollbar
       sx={{

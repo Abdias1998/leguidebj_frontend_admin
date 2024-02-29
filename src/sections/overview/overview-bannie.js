@@ -1,24 +1,17 @@
 "use-client";
 import PropTypes from "prop-types";
 // import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
-import {
-  Avatar,
-  Card,
-  CardContent,
-  Stack,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { requete } from "src/env/requete";
 
-export const OverviewTotalBannie = (props) => {
+export const OverviewTotalUsersBannie = (props) => {
   const [users, setUsers] = useState([]);
 
   const { value, sx } = props;
   const getUsers = async () => {
-    const res = await axios.get(`${requete.user}/banner/usersignal`);
+    const res = await axios.get(`${requete.admin}/users_total_order`);
     return res;
   };
   useEffect(() => {
@@ -31,15 +24,10 @@ export const OverviewTotalBannie = (props) => {
   return (
     <Card sx={sx}>
       <CardContent>
-        <Stack
-          alignItems="flex-start"
-          direction="row"
-          justifyContent="space-between"
-          spacing={3}
-        >
+        <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Total Bannie
+              Total Utilisateurs Bannie
             </Typography>
             <Typography variant="h4">{users?.bannedUserCount}</Typography>
           </Stack>
@@ -73,7 +61,7 @@ export const OverviewTotalBannie = (props) => {
   );
 };
 
-OverviewTotalBannie.propTypes = {
+OverviewTotalUsersBannie.propTypes = {
   value: PropTypes.string,
   sx: PropTypes.object,
 };

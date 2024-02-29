@@ -89,22 +89,22 @@ export const AuthProvider = (props) => {
 
     if (isAuthenticated) {
       // Si la connexion réussit, effectuez une requête pour récupérer les données de l'utilisateur
-      const response = await axios.get(`${requete.admin}/admin_verify_token`);
-      const userInfo = response.data;
-      console.log(userInfo);
-      const user = {
-        id: userInfo.user._id,
-        avatar: "/assets/logos/logo.jpg",
-        name: userInfo.user.name,
-        identifier: userInfo.user.role,
-      };
-      console.log(user);
+      // const response = await axios.get(`${requete.admin}/admin_verify_token`);
+      // const userInfo = response.data;
+      // console.log(userInfo);
       // const user = {
-      //   id: "5e86809283e28b96d2d38537",
+      //   id: userInfo.user._id,
       //   avatar: "/assets/logos/logo.jpg",
-      //   name: "Anika Visser Abdias",
-      //   identifier: "anika.visser@devias.io",
+      //   name: userInfo.user.name,
+      //   identifier: userInfo.user.role,
       // };
+      // console.log(user);
+      const user = {
+        id: "5e86809283e28b96d2d38537",
+        avatar: "/assets/logos/logo.jpg",
+        name: "Anika Visser Abdias",
+        identifier: "anika.visser@devias.io",
+      };
 
       dispatch({
         type: HANDLERS.INITIALIZE,
@@ -163,13 +163,22 @@ export const AuthProvider = (props) => {
 
   // ... Le reste de votre code reste inchangé ...
   const signUp = async (identifier, name, password) => {
-    throw new Error("Sign up is not implemented");
+    throw new Error("Sign up is not implemented")
   };
-
-  const signOut = () => {
-    dispatch({
-      type: HANDLERS.SIGN_OUT,
-    });
+ 
+  const signOut = async () => {
+    const res = await axios.post(
+      `${requete.admin}/logout_admin`,
+      null,
+      {
+        withCredentials: true,
+      }
+    );
+    if (res.status === 200) {
+      dispatch({
+        type: HANDLERS.SIGN_OUT,
+      });
+    }
   };
 
   return (

@@ -1,14 +1,7 @@
 "use-client";
 import PropTypes from "prop-types";
 
-import {
-  Avatar,
-  Card,
-  CardContent,
-  Stack,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
 
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -19,7 +12,7 @@ export const OverviewTotalComment = (props) => {
 
   const { value, sx } = props;
   const getUsers = async () => {
-    const res = await axios.get(`${requete.user}/all-comments`);
+    const res = await axios.get(`${requete.admin}/get_all_guides_comments`);
     return res;
   };
   useEffect(() => {
@@ -31,12 +24,7 @@ export const OverviewTotalComment = (props) => {
   return (
     <Card sx={sx}>
       <CardContent>
-        <Stack
-          alignItems="flex-start"
-          direction="row"
-          justifyContent="space-between"
-          spacing={3}
-        >
+        <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
               Total Commentaire

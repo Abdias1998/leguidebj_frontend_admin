@@ -39,7 +39,7 @@ const Page = () => {
     onSubmit: async (values, helpers) => {
       try {
         await auth.signIn(values.identifier, values.password);
-        router.push("/");
+        router.push("/admin/dashboard");
       } catch (err) {
         helpers.setStatus({ success: false });
         helpers.setErrors({ submit: err.message });
@@ -54,13 +54,13 @@ const Page = () => {
 
   const handleSkip = useCallback(() => {
     auth.skip();
-    router.push("/");
+    router.push("/admin/dashboard");
   }, [auth, router]);
 
   return (
     <>
       <Head>
-        <title>Connexion| LE GUIDE BJ</title>
+        <title> Connexion | LE GUIDE BJ</title>
       </Head>
       <Box
         sx={{
@@ -81,19 +81,20 @@ const Page = () => {
         >
           <div>
             <Stack spacing={1} sx={{ mb: 3 }}>
-              <Typography variant="h4">Connexion</Typography>
               <Typography color="text.secondary" variant="body2">
-                Don&apos;t have an account? &nbsp;
+                <Typography variant="h4">Connexion</Typography>
+                {/* Don&apos;t have an account? &nbsp;
                 <Link
                   component={NextLink}
-                  href="/auth/register"
+                  href="/admin/auth/register"
                   underline="hover"
                   variant="subtitle2"
                 >
                   Inscription
-                </Link>
+                </Link> */}
               </Typography>
             </Stack>
+
             {/* <Tabs onChange={handleMethodChange} sx={{ mb: 3 }} value={method}>
               <Tab label="Email" value="email" />
               <Tab label="Phone Number" value="phoneNumber" />
@@ -105,7 +106,7 @@ const Page = () => {
                     error={!!(formik.touched.identifier && formik.errors.identifier)}
                     fullWidth
                     helperText={formik.touched.identifier && formik.errors.identifier}
-                    label="Email Address"
+                    label="Email Address or Phone number"
                     name="identifier"
                     onBlur={formik.handleBlur}
                     onChange={formik.handleChange}

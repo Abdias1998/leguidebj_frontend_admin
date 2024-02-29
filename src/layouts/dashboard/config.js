@@ -11,16 +11,16 @@ import { SvgIcon } from "@mui/material";
 export const items = [
   {
     title: "Dashboard",
-    path: "/",
+    path: "/admin/dashboard",
     icon: (
       <SvgIcon fontSize="small">
         <ChartBarIcon />
       </SvgIcon>
-    ),
+    ), 
   },
   {
-    title: "Vidéo",
-    path: "/videos",
+    title: "Guides",
+    path: "/admin/guides",
     icon: (
       <SvgIcon fontSize="small">
         <UsersIcon />
@@ -29,7 +29,7 @@ export const items = [
   },
   {
     title: "Utilisateurs",
-    path: "/companies",
+    path: "/admin/users",
     icon: (
       <SvgIcon fontSize="small">
         <ShoppingBagIcon />
@@ -37,8 +37,8 @@ export const items = [
     ),
   },
   {
-    title: "Account",
-    path: "/account",
+    title: "Compte",
+    path: "/admin/account",
     icon: (
       <SvgIcon fontSize="small">
         <UserIcon />
@@ -46,39 +46,39 @@ export const items = [
     ),
   },
   {
-    title: "Settings",
-    path: "/settings",
+    title: "Paramètres",
+    path: "/admin/settings",
     icon: (
       <SvgIcon fontSize="small">
         <CogIcon />
       </SvgIcon>
     ),
   },
-  {
-    title: "Login",
-    path: "/auth/login",
-    icon: (
-      <SvgIcon fontSize="small">
-        <LockClosedIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Register",
-    path: "/auth/register",
-    icon: (
-      <SvgIcon fontSize="small">
-        <UserPlusIcon />
-      </SvgIcon>
-    ),
-  },
-  {
-    title: "Error",
-    path: "/404",
-    icon: (
-      <SvgIcon fontSize="small">
-        <XCircleIcon />
-      </SvgIcon>
-    ),
-  },
+  // {
+  //   title: "Login",
+  //   path: "/admin/auth/login",
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <LockClosedIcon />
+  //     </SvgIcon>
+  //   ),
+  // },
+  // {
+  //   title: "Register",
+  //   path: "/admin/auth/register",
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <UserPlusIcon />
+  //     </SvgIcon>
+  //   ),
+  // },
+  // {
+  //   title: "Error",
+  //   path: "/404",
+  //   icon: (
+  //     <SvgIcon fontSize="small">
+  //       <XCircleIcon />
+  //     </SvgIcon>
+  //   ),
+  // },
 ];

@@ -13,7 +13,7 @@ export const OverviewTotalAdmin = (props) => {
 
   const { value, sx } = props;
   const getUsers = async () => {
-    const res = await axios.get(`${requete.admin}/auth/role`);
+    const res = await axios.get(`${requete.admin}/admin_total_role`);
     return res;
   };
   useEffect(() => {
@@ -28,7 +28,7 @@ export const OverviewTotalAdmin = (props) => {
         <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Total Admin
+              Total Admin Principal
             </Typography>
             <Typography variant="h4">{users?.countIsAdminPrincipal}</Typography>
           </Stack>

@@ -1,25 +1,18 @@
 "use-client";
 import PropTypes from "prop-types";
 import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
-import {
-  Avatar,
-  Card,
-  CardContent,
-  Stack,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
 // import BanIcon from "@heroicons/react/24/solid/BanIcon";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { requete } from "src/env/requete";
 
-export const OverviewTotalSignal = (props) => {
+export const OverviewTotalGuide = (props) => {
   const [users, setUsers] = useState([]);
 
   const { value, sx } = props;
   const getUsers = async () => {
-    const res = await axios.get(`${requete.user}/banner/usersignal`);
+    const res = await axios.get(`${requete.admin}/get_all_guides`);
     return res;
   };
   useEffect(() => {
@@ -31,19 +24,12 @@ export const OverviewTotalSignal = (props) => {
   return (
     <Card sx={sx}>
       <CardContent>
-        <Stack
-          alignItems="flex-start"
-          direction="row"
-          justifyContent="space-between"
-          spacing={3}
-        >
+        <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Total Signal
+              Total Guide
             </Typography>
-            <Typography variant="h4">
-              {users?.usersWithReportingCount}
-            </Typography>
+            <Typography variant="h4">{users?.length}</Typography>
           </Stack>
           <Avatar
             sx={{
@@ -75,7 +61,7 @@ export const OverviewTotalSignal = (props) => {
   );
 };
 
-OverviewTotalSignal.propTypes = {
+OverviewTotalGuide.propTypes = {
   value: PropTypes.string,
   sx: PropTypes.object,
 };

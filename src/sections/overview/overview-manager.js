@@ -1,14 +1,7 @@
 "use-client";
 import PropTypes from "prop-types";
 import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
-import {
-  Avatar,
-  Card,
-  CardContent,
-  Stack,
-  SvgIcon,
-  Typography,
-} from "@mui/material";
+import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
 import BriefcaseIcon from "@heroicons/react/24/solid/BriefcaseIcon";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -19,7 +12,7 @@ export const OverviewTotalManager = (props) => {
 
   const { value, sx } = props;
   const getUsers = async () => {
-    const res = await axios.get(`${requete.admin}/auth/role`);
+    const res = await axios.get(`${requete.admin}/admin_total_role`);
     return res;
   };
   useEffect(() => {
@@ -30,12 +23,7 @@ export const OverviewTotalManager = (props) => {
   return (
     <Card sx={sx}>
       <CardContent>
-        <Stack
-          alignItems="flex-start"
-          direction="row"
-          justifyContent="space-between"
-          spacing={3}
-        >
+        <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
               Total Manager

@@ -1,25 +1,22 @@
 "use-client";
 import PropTypes from "prop-types";
-import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
+
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
-import PersonIcon from "@heroicons/react/24/solid/UserIcon";
+
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { requete } from "src/env/requete";
-import { useAuthContext } from "src/contexts/auth-context";
 
-export const OverviewTotalUsers = (props) => {
-  const [users, setUsers] = useState([]);
-  const authContext = useAuthContext();
-  const user = authContext.user;
+export const OverviewTotalGuideIsActive = (props) => {
+  const [users, setUsers] = useState();
+
   const { value, sx } = props;
   const getUsers = async () => {
-    const res = await axios.get(`${requete.admin}/get_all_users`);
+    const res = await axios.get(`${requete.admin}/get_all_guides_active!`);
     return res;
   };
   useEffect(() => {
     getUsers().then((res) => {
-      //   console.log(data);
       setUsers(res.data);
     });
   }, []);
@@ -30,9 +27,10 @@ export const OverviewTotalUsers = (props) => {
         <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Total Utilisateurs
+              Guide Active et Diseable
             </Typography>
-            <Typography variant="h4">{users?.length}</Typography>
+            <Typography variant="h4">{users?.countIsActive}</Typography>
+            <Typography variant="h4">{users?.countIsDiseable}</Typography>
           </Stack>
           <Avatar
             sx={{
@@ -42,6 +40,7 @@ export const OverviewTotalUsers = (props) => {
             }}
           >
             <SvgIcon>
+              {" "}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -53,7 +52,7 @@ export const OverviewTotalUsers = (props) => {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+                  d="M7.5 8.25h9m-9 3H12m-9.75 1.51c0 1.6 1.123 2.994 2.707 3.227 1.129.166 2.27.293 3.423.379.35.026.67.21.865.501L12 21l2.755-4.133a1.14 1.14 0 01.865-.501 48.172 48.172 0 003.423-.379c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
                 />
               </svg>
             </SvgIcon>
@@ -64,7 +63,7 @@ export const OverviewTotalUsers = (props) => {
   );
 };
 
-OverviewTotalUsers.propTypes = {
+OverviewTotalGuideIsActive.propTypes = {
   value: PropTypes.string,
   sx: PropTypes.object,
 };
