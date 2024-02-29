@@ -33,7 +33,6 @@ import axios from "axios";
 import { OverviewTotalGuideIsActive } from "src/sections/overview/overview-isactive";
 import { useAuthContext } from "src/contexts/auth-context";
 import { requete } from "src/env/requete";
-import { Manager } from "./manager";
 
 const now = new Date();
 
@@ -201,7 +200,6 @@ const Page = () => (
           </Grid>
         </Grid>
       </Container>
-    <Manager />
     </Box>
   </>
 );
