@@ -275,7 +275,8 @@ export const AuthProvider = (props) => {
       });
         // console.log(user);
       } catch (error) {
-        console.log(error);
+        console.error(error);
+        throw new Error(error.message);
       }
 
     
@@ -331,7 +332,7 @@ export const AuthProvider = (props) => {
       });
     } catch (error) {
       console.error(error);
-      throw new Error(error.response.data.message);
+      throw new Error(error.message);
     }
   };
 
