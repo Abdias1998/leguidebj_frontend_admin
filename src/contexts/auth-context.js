@@ -306,8 +306,7 @@ export const AuthProvider = (props) => {
         {
           identifier,
           password,
-        },
-        { withCredentials: true }
+        }
       );
       console.log(login.data);
 

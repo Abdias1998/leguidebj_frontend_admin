@@ -9,7 +9,8 @@ import { useNProgress } from "src/hooks/use-nprogress";
 import { createTheme } from "src/theme";
 import { createEmotionCache } from "src/utils/create-emotion-cache";
 import "simplebar-react/dist/simplebar.min.css";
-
+import axios from "axios";
+axios.defaults.withCredentials = true;
 const clientSideEmotionCache = createEmotionCache();
 
 const SplashScreen = () => null;
