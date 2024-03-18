@@ -1,36 +1,31 @@
 "use-client";
 import PropTypes from "prop-types";
-
+import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
-import UserCircleIcon from "@heroicons/react/24/solid/UserCircleIcon";
-
+import BriefcaseIcon from "@heroicons/react/24/solid/BriefcaseIcon";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { requete } from "src/env/requete";
+import { getAdminRole, requete } from "src/env/requete";
 
-export const OverviewTotalAdmin = (props) => {
-  const [users, setUsers] = useState();
+export const DashboardTotalManager = (props) => {
+  const [admins, setAdmins] = useState();
 
   const { value, sx } = props;
-  const getUsers = async () => {
-    const res = await axios.get(`${requete.admin}/admin_total_role`);
-    return res;
-  };
+
   useEffect(() => {
-    getUsers().then((res) => {
-      setUsers(res.data);
+    getAdminRole().then((res) => {
+      setAdmins(res.data);
     });
   }, []);
-
   return (
     <Card sx={sx}>
       <CardContent>
         <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Total Admin Principal
+              Total Manager
             </Typography>
-            <Typography variant="h4">{users?.countIsAdminPrincipal}</Typography>
+            <Typography variant="h4">{admins?.countIsManager}</Typography>
           </Stack>
           <Avatar
             sx={{
@@ -40,7 +35,7 @@ export const OverviewTotalAdmin = (props) => {
             }}
           >
             <SvgIcon>
-              <UserCircleIcon />
+              <BriefcaseIcon />
             </SvgIcon>
           </Avatar>
         </Stack>
@@ -49,7 +44,7 @@ export const OverviewTotalAdmin = (props) => {
   );
 };
 
-OverviewTotalAdmin.propTypes = {
+DashboardTotalManager.propTypes = {
   value: PropTypes.string,
   sx: PropTypes.object,
 };

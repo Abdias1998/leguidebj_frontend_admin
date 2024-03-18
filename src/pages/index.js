@@ -9,20 +9,21 @@ import { Layout as DashboardLayout } from "src/layouts/dashboard/layout";
 import { OverviewBudget } from "src/sections/overview/overview-budget";
 import { OverviewLatestOrders } from "src/sections/overview/overview-latest-orders";
 import { OverviewLatestProducts } from "src/sections/overview/overview-latest-products";
-import { OverviewSales } from "src/sections/overview/overview-sales";
-import { OverviewTasksProgress } from "src/sections/overview/overview-tasks-progress";
+import { OverviewSales } from "src/sections/dashboard/stats-guides";
+import { OverviewTasksProgress } from "src/sections/dashboard/dashboard-tasks-progress";
 import { OverviewTotalCustomers } from "src/sections/overview/overview-total-customers";
 import { OverviewTotalProfit } from "src/sections/overview/overview-total-profit";
 import { OverviewTraffic } from "src/sections/overview/overview-traffic";
-import { OverviewTotalUsers } from "src/sections/overview/overview-users";
+import { OverviewTotalUsers } from "src/sections/dashboard/dashboard-users";
 import { OverviewTotalVideos } from "src/sections/overview/overviews-video";
-import { OverviewTotalManager } from "src/sections/overview/overview-manager";
-import { OverviewTotalBannie } from "src/sections/overview/overview-bannie";
-import { OverviewTotalSignal } from "src/sections/overview/overview-signal";
-import { OverviewTotalComment } from "src/sections/overview/overview-comment";
+import { OverviewTotalManager } from "src/sections/dashboard/dashboard-manager";
+import { OverviewTotalBannie } from "src/sections/dashboard/dashboard-bannie";
+import { OverviewTotalSignal } from "src/sections/dashboard/dashboard-total-guides";
+import { OverviewTotalComment } from "src/sections/dashboard/dashboard-comment";
 import { OverviewTotalRatings } from "src/sections/overview/overview-ratings";
-import { OverviewTotalAdmin } from "src/sections/overview/overview-admin";
+import { OverviewTotalAdmin } from "src/sections/dashboard/dashboard-admin";
 import axios from "axios";
+import Navbar from "src/components/navbar/navbar-client";
 
 const now = new Date();
 
@@ -30,7 +31,9 @@ const Page = () => (
   <>
     <Head>
       <title>Accueil | LE GUIDE BJ</title>
+      <meta   />
     </Head>
+    <Navbar/>
     <Box
       component="main"
       sx={{
@@ -48,41 +51,7 @@ const Page = () => (
             flexDirection: "column",
           }}
         >
-          <Box
-            sx={{
-              mb: 3,
-              textAlign: "center",
-            }}
-          >
-            <img
-              alt="Under development"
-              src="/assets/errors/error-404.png"
-              style={{
-                display: "inline-block",
-                maxWidth: "100%",
-                width: 400,
-              }}
-            />
-          </Box>
-          <Typography align="center" sx={{ mb: 3 }} variant="h3">
-            404: La plateforme est en developpement
-          </Typography>
-          <Typography align="center" color="text.secondary" variant="body1">
-            La page que vous avez démandé est en maintenance
-          </Typography>
-          <Button
-            component={NextLink}
-            href="/admin/auth/login"
-            startIcon={
-              <SvgIcon fontSize="small">
-                <ArrowLeftIcon />
-              </SvgIcon>
-            }
-            sx={{ mt: 3 }}
-            variant="contained"
-          >
-            Aller à la page de connexion
-          </Button>
+         
         </Box>
       </Container>
     </Box>

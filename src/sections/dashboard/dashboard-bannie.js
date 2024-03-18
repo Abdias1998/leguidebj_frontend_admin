@@ -1,20 +1,17 @@
 "use-client";
 import PropTypes from "prop-types";
-import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
+// import CurrencyDollarIcon from "@heroicons/react/24/solid/CurrencyDollarIcon";
 import { Avatar, Card, CardContent, Stack, SvgIcon, Typography } from "@mui/material";
-import PersonIcon from "@heroicons/react/24/solid/UserIcon";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { requete } from "src/env/requete";
-import { useAuthContext } from "src/contexts/auth-context";
 
-export const OverviewTotalUsers = (props) => {
+export const DashboardTotalUsersBannie = (props) => {
   const [users, setUsers] = useState([]);
-  const authContext = useAuthContext();
-  const user = authContext.user;
+
   const { value, sx } = props;
   const getUsers = async () => {
-    const res = await axios.get(`${requete.admin}/get_all_users`);
+    const res = await axios.get(`${requete.admin}/users_total_order`);
     return res;
   };
   useEffect(() => {
@@ -30,9 +27,9 @@ export const OverviewTotalUsers = (props) => {
         <Stack alignItems="flex-start" direction="row" justifyContent="space-between" spacing={3}>
           <Stack spacing={1}>
             <Typography color="text.secondary" variant="overline">
-              Total Utilisateurs
+              Total Utilisateurs Bannie
             </Typography>
-            <Typography variant="h4">{users?.length}</Typography>
+            <Typography variant="h4">{users?.bannedUserCount}</Typography>
           </Stack>
           <Avatar
             sx={{
@@ -53,7 +50,7 @@ export const OverviewTotalUsers = (props) => {
                 <path
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+                  d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"
                 />
               </svg>
             </SvgIcon>
@@ -64,7 +61,7 @@ export const OverviewTotalUsers = (props) => {
   );
 };
 
-OverviewTotalUsers.propTypes = {
+DashboardTotalUsersBannie.propTypes = {
   value: PropTypes.string,
   sx: PropTypes.object,
 };

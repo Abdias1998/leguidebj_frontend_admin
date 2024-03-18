@@ -21,6 +21,8 @@ import {
   DialogContent,
   DialogActions,
   TextField,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import axios from "axios";
 import { requete } from "src/env/requete";
@@ -80,6 +82,8 @@ const PaginationPage = () => {
       country: videoToEdit?.country || "",
       zone: videoToEdit?.zone || "",
       language: videoToEdit?.language || "",
+      experience: videoToEdit?.experience || "",
+      available: videoToEdit?.available || "",
 
       // Ajoutez ici d'autres champs de formulaire
     });
@@ -109,7 +113,61 @@ const PaginationPage = () => {
         console.error("Erreur lors de la modification.", error);
       }
     };
-
+    const africanCountries = [
+      "Algérie",
+      "Angola",
+      "Bénin",
+      "Botswana",
+      "Burkina Faso",
+      "Burundi",
+      "Cameroun",
+      "Cap-Vert",
+      "République Centrafricaine",
+      "Tchad",
+      "Comores",
+      "Congo",
+      "République Démocratique Du Congo",
+      "Djibouti",
+      "Égypte",
+      "Guinée Équatoriale",
+      "Érythrée",
+      "Éthiopie",
+      "Gabon",
+      "Gambie",
+      "Guinée",
+      "Guinée-Bissau",
+      "Côte d'Ivoire",
+      "Kenya",
+      "Lesotho",
+      "Libye",
+      "Liberia",
+      "Madagascar",
+      "Malawi",
+      "Mali",
+      "Mauritanie",
+      "Maurice",
+      "Maroc",
+      "Mozambique",
+      "Namibie",
+      "Niger",
+      "Nigeria",
+      "Rwanda",
+      "Sao Tomé-et-Principe",
+      "Sénégal",
+      "Seychelles",
+      "Sierra Leone",
+      "Somalie",
+      "Afrique Du Sud",
+      "Soudan Du Sud",
+      "Swaziland",
+      "Soudan",
+      "Tanzanie",
+      "Togo",
+      "Tunisie",
+      "Ouganda",
+      "Zambie",
+      "Zimbabwe"
+    ];
     return (
       <form onSubmit={handleSubmit}>
         <Grid container spacing={3}>
@@ -158,9 +216,9 @@ const PaginationPage = () => {
             <TextField
               fullWidth
               variant="outlined"
-              label="Téléphone"
-              name="tel"
-              value={formData.tel}
+              label="Disponibilité"
+              name="available"
+              value={formData.available}
               onChange={handleChange}
             />
           </Grid>
@@ -168,12 +226,38 @@ const PaginationPage = () => {
             <TextField
               fullWidth
               variant="outlined"
-              label="Pays"
-              name="country"
-              value={formData.country}
+              label="Expérience"
+              name="experience"
+              value={formData.experience}
               onChange={handleChange}
             />
           </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              variant="outlined"
+              label="Téléphone"
+              name="tel"
+              value={formData.tel}
+              onChange={handleChange}
+            />
+          </Grid>
+        
+          <Grid item xs={12}>
+                <Select
+          fullWidth
+          label="Pays"
+          name="country"
+          value={formData.country}
+          onChange={handleChange}
+        >
+          {africanCountries.map((country) => (
+            <MenuItem key={country} value={country}>
+              {country}
+            </MenuItem>
+          ))}
+        </Select>
+                </Grid>
           <Grid item xs={12}>
             <TextField
               fullWidth
@@ -294,6 +378,20 @@ const PaginationPage = () => {
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
   };
+  function getDateInscription(createdAt) {
+    // Convertir la chaîne ISODate en objet Date
+    const date = new Date(createdAt);
+
+    // Extraire le jour, le mois et l'année de la date d'inscription
+    const day = date.getDate();
+    const month = date.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
+    const year = date.getFullYear();
+
+    // Formater la date d'inscription comme JJ/MM/AAAA
+    const formattedDate = `${day}/${month}/${year}`;
+
+    return formattedDate;
+}
 
   return (
     <div>
@@ -328,10 +426,15 @@ const PaginationPage = () => {
                 <TableCell>Modifier</TableCell>
                 <TableCell>names</TableCell>
                 <TableCell>Email</TableCell>
+                <TableCell>Membre dépuis</TableCell>
+
+                <TableCell>Code</TableCell>
                 <TableCell>Tel</TableCell>
                 <TableCell>Pays</TableCell>
                 <TableCell>Language</TableCell>
                 <TableCell>Zone</TableCell>
+                <TableCell>Disponibilité</TableCell>
+                <TableCell>Expérience</TableCell>
                 <TableCell>Description</TableCell>
               </TableRow>
             </TableHead>
@@ -356,10 +459,15 @@ const PaginationPage = () => {
 
                   <TableCell>{item.names}</TableCell>
                   <TableCell>{item.email}</TableCell>
+                  <TableCell>{`${ getDateInscription(item.createdAt)}`}</TableCell>
+          
+                  <TableCell>{item.code}</TableCell>
                   <TableCell>{`${item.tel}`}</TableCell>
                   <TableCell>{`${item.country}`}</TableCell>
                   <TableCell>{item.language}</TableCell>
                   <TableCell>{item.zone}</TableCell>
+                  <TableCell>{item.available}</TableCell>
+                  <TableCell>{item.experience}</TableCell>
                   <TableCell>{truncate(item.description, 50)}</TableCell>
                 </TableRow>
               ))}

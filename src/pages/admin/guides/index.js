@@ -16,6 +16,8 @@ import {
   TableRow,
   Typography,
   SvgIcon,
+  Select,
+  MenuItem,
 } from "@mui/material";
 import Head from "next/head";
 import { subDays, subHours } from "date-fns";
@@ -184,6 +186,61 @@ const data = [
     phone: "801-301-7894",
   },
 ];
+const africanCountries = [
+  "Algérie",
+  "Angola",
+  "Bénin",
+  "Botswana",
+  "Burkina Faso",
+  "Burundi",
+  "Cameroun",
+  "Cap-Vert",
+  "République Centrafricaine",
+  "Tchad",
+  "Comores",
+  "Congo",
+  "République Démocratique Du Congo",
+  "Djibouti",
+  "Égypte",
+  "Guinée Équatoriale",
+  "Érythrée",
+  "Éthiopie",
+  "Gabon",
+  "Gambie",
+  "Guinée",
+  "Guinée-Bissau",
+  "Côte d'Ivoire",
+  "Kenya",
+  "Lesotho",
+  "Libye",
+  "Liberia",
+  "Madagascar",
+  "Malawi",
+  "Mali",
+  "Mauritanie",
+  "Maurice",
+  "Maroc",
+  "Mozambique",
+  "Namibie",
+  "Niger",
+  "Nigeria",
+  "Rwanda",
+  "Sao Tomé-et-Principe",
+  "Sénégal",
+  "Seychelles",
+  "Sierra Leone",
+  "Somalie",
+  "Afrique Du Sud",
+  "Soudan Du Sud",
+  "Swaziland",
+  "Soudan",
+  "Tanzanie",
+  "Togo",
+  "Tunisie",
+  "Ouganda",
+  "Zambie",
+  "Zimbabwe"
+];
 
 const useCustomers = (page, rowsPerPage) => {
   return useMemo(() => {
@@ -224,7 +281,9 @@ const Page = () => {
     tel: "",
     zone: "",
     country: "",
+    experience: "",
     description: "",
+    available : "",
     document: null,
     // imageFile: null,
   });
@@ -261,18 +320,17 @@ const Page = () => {
 
       if (response.status === 201) {
         setIsSuccess(true);
-        setDialogMessage("Image de couverture mise à jour avec succès");
-      } else {
-        setIsSuccess(false);
-        setDialogMessage("Erreur lors de la mise à jour de l'image de couverture: ");
-      }
+        setDialogMessage(response.data.message);
+        console.log(response.data.message);
+      } 
     } catch (error) {
       setIsSuccess(false);
-      setDialogMessage("Erreur lors de la mise à jour de l'image de couverture: " + error.message);
+      setDialogMessage(error.response.data.message);
     } finally {
       setOpenDialog(true);
     }
   };
+  
   return (
     <>
       <Head>
@@ -384,13 +442,19 @@ const Page = () => {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <TextField
-                    fullWidth
-                    label="Pays"
-                    name="country"
-                    value={formData.country}
-                    onChange={handleInputChange}
-                  />
+                <Select
+          fullWidth
+          label="Pays"
+          name="country"
+          value={formData.country}
+          onChange={handleInputChange}
+        >
+          {africanCountries.map((country) => (
+            <MenuItem key={country} value={country}>
+              {country}
+            </MenuItem>
+          ))}
+        </Select>
                 </Grid>
                 <Grid item xs={6}>
                   <TextField
@@ -407,6 +471,24 @@ const Page = () => {
                     label="Language"
                     name="language"
                     value={formData.language}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Expérience"
+                    name="experience"
+                    value={formData.experience}
+                    onChange={handleInputChange}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <TextField
+                    fullWidth
+                    label="Disponibilité"
+                    name="available"
+                    value={formData.available }
                     onChange={handleInputChange}
                   />
                 </Grid>

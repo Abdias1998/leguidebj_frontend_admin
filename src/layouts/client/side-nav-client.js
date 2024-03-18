@@ -15,18 +15,16 @@ import {
 } from "@mui/material";
 import { Logo } from "src/components/logo";
 import { Scrollbar } from "src/components/scrollbar";
-import { getItemsByRole } from "./config";
-import { SideNavItem } from "./side-nav-item";
+import { items } from "./config-client"; 
+import { SideNavItemClient } from "./side-nav-items-client"; 
 import { useAuthContext } from "src/contexts/auth-context";
 
-export const SideNav = (props) => {
+export const SideNavClient = (props) => {
   const { open, onClose } = props;
   const pathname = usePathname();
   const lgUp = useMediaQuery((theme) => theme.breakpoints.up("lg"));
   const authContext = useAuthContext();
   const user = authContext.user;
-  const items = getItemsByRole(user?.role);
-  console.log('user' + user);
   const content = (
     <Scrollbar
       sx={{
@@ -105,7 +103,7 @@ export const SideNav = (props) => {
               const active = item.path ? pathname === item.path : false;
 
               return (
-                <SideNavItem
+                <SideNavItemClient
                   active={active}
                   disabled={item.disabled}
                   external={item.external}
@@ -212,7 +210,7 @@ export const SideNav = (props) => {
   );
 };
 
-SideNav.propTypes = {
+SideNavClient.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
 };

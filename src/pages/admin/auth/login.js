@@ -5,14 +5,10 @@ import { useRouter } from "next/navigation";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import {
-  Alert,
   Box,
   Button,
-  FormHelperText,
-  Link,
+  CircularProgress,
   Stack,
-  Tab,
-  Tabs,
   TextField,
   Typography,
 } from "@mui/material";
@@ -21,8 +17,10 @@ import { Layout as AuthLayout } from "src/layouts/auth/layout";
 
 const Page = () => {
   const router = useRouter();
-  const auth = useAuth();
+  const auth = useAuth();  
   const [method, setMethod] = useState("identifier");
+  const [loading, setLoading] = useState(false); // Ajout de l'état pour le chargement du formulaire
+
   const formik = useFormik({
     initialValues: {
       identifier: "",
@@ -31,19 +29,21 @@ const Page = () => {
     },
     validationSchema: Yup.object({
       identifier: Yup.string()
-        .email("Saisissez un mail vailde")
+        .email("Saisissez un mail valide")
         .max(255)
         .required("Ce champ est requis"),
       password: Yup.string().max(255).required("Ce champ est requis"),
     }),
     onSubmit: async (values, helpers) => {
+      setLoading(true); // Activer le chargement lors de la soumission du formulaire
       try {
         await auth.signIn(values.identifier, values.password);
         router.push("/admin/dashboard");
       } catch (err) {
         helpers.setStatus({ success: false });
-        helpers.setErrors({ submit: err.response.data.message });
-        helpers.setSubmitting(false);
+        helpers.setErrors({ submit: err.message });
+      } finally {
+        setLoading(false); // Désactiver le chargement après la soumission du formulaire
       }
     },
   });
@@ -51,11 +51,6 @@ const Page = () => {
   const handleMethodChange = useCallback((event, value) => {
     setMethod(value);
   }, []);
-
-  const handleSkip = useCallback(() => {
-    auth.skip();
-    router.push("/admin/dashboard");
-  }, [auth, router]);
 
   return (
     <>
@@ -83,22 +78,9 @@ const Page = () => {
             <Stack spacing={1} sx={{ mb: 3 }}>
               <Typography color="text.secondary" variant="body2">
                 <Typography variant="h4">Connexion au compte Admin</Typography>
-                {/* Don&apos;t have an account? &nbsp;
-                <Link
-                  component={NextLink}
-                  href="/admin/auth/register"
-                  underline="hover"
-                  variant="subtitle2"
-                >
-                  Inscription
-                </Link> */}
               </Typography>
             </Stack>
 
-            {/* <Tabs onChange={handleMethodChange} sx={{ mb: 3 }} value={method}>
-              <Tab label="Email" value="email" />
-              <Tab label="Phone Number" value="phoneNumber" />
-            </Tabs> */}
             {method === "identifier" && (
               <form noValidate onSubmit={formik.handleSubmit}>
                 <Stack spacing={3}>
@@ -125,51 +107,29 @@ const Page = () => {
                     value={formik.values.password}
                   />
                 </Stack>
-                {/* <FormHelperText sx={{ mt: 1 }}>
-                  Optionally you can skip.
-                </FormHelperText> */}
                 {formik.errors.submit && (
                   <Typography color="error" sx={{ mt: 3 }} variant="body2">
                     {formik.errors.submit}
                   </Typography>
                 )}
-                <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  type="submit"
-                  variant="contained"
-                  style={{ backgroundColor: "#E50913" }}
-                >
-                  Continue
-                </Button>
-                {/* <Button
-                  fullWidth
-                  size="large"
-                  sx={{ mt: 3 }}
-                  onClick={handleSkip}
-                >
-                  Skip authentication
-                </Button> */}
-                {/* <Alert color="primary" severity="info" sx={{ mt: 3 }}>
-                  <div>
-                    You can use <b>demo@devias.io</b> and password{" "}
-                    <b>Password123!</b>
-                  </div>
-                </Alert> */}
+
+                {/* Afficher le bouton normal ou l'icône de chargement en fonction de l'état de loading */}
+                {loading ? (
+                  <CircularProgress sx={{ mt: 3 }} color="primary" />
+                ) : (
+                  <Button
+                    fullWidth
+                    size="large"
+                    sx={{ mt: 3 }}
+                    type="submit"
+                    variant="contained"
+                    style={{ backgroundColor: "#E50913" }}
+                  >
+                    Continue
+                  </Button>
+                )}
               </form>
             )}
-            {/* {method === "phoneNumber" && (
-              <div>
-                <Typography sx={{ mb: 1 }} variant="h6">
-                  Not available in the demo
-                </Typography>
-                <Typography color="text.secondary">
-                  To prevent unnecessary costs we disabled this feature in the
-                  demo.
-                </Typography>
-              </div>
-            )} */}
           </div>
         </Box>
       </Box>

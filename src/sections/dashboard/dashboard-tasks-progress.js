@@ -10,10 +10,22 @@ import {
   SvgIcon,
   Typography
 } from '@mui/material';
-
-export const OverviewTasksProgress = (props) => {
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+import { requete } from 'src/env/requete';
+export const DashboardTaskProgress = (props) => {
   const { value, sx } = props;
-
+  const [users, setUsers] = useState([]);
+  const getUsers = async () => {
+    const res = await axios.get(`${requete.admin}/get_all_users`);
+    return res;
+  };
+  useEffect(() => {
+    getUsers().then((res) => {
+      //   console.log(data);
+      setUsers(res.data);
+    });
+  }, []);
   return (
     <Card sx={sx}>
       <CardContent>
@@ -32,7 +44,7 @@ export const OverviewTasksProgress = (props) => {
               Task Progress
             </Typography>
             <Typography variant="h4">
-              {value}%
+              {users?.length}%
             </Typography>
           </Stack>
           <Avatar
@@ -49,7 +61,7 @@ export const OverviewTasksProgress = (props) => {
         </Stack>
         <Box sx={{ mt: 3 }}>
           <LinearProgress
-            value={value}
+            value={1000}
             variant="determinate"
           />
         </Box>
@@ -58,7 +70,7 @@ export const OverviewTasksProgress = (props) => {
   );
 };
 
-OverviewTasksProgress.propTypes = {
+DashboardTaskProgress.propTypes = {
   value: PropTypes.number.isRequired,
   sx: PropTypes.object
 };

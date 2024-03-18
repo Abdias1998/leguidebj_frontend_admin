@@ -6,7 +6,7 @@ import { useAuthContext } from "src/contexts/auth-context";
 import { Box, Divider, MenuItem, MenuList, Popover, Typography } from "@mui/material";
 import { useAuth } from "src/hooks/use-auth";
 
-export const AccountPopover = (props) => {
+export const AccountPopoverClient = (props) => {
   const authContext = useAuthContext();
   const user = authContext.user;
   const { anchorEl, onClose, open } = props;
@@ -38,7 +38,7 @@ export const AccountPopover = (props) => {
       >
         <Typography variant="overline">Compte</Typography>
         <Typography color="text.secondary" variant="body2">
-          {user?.role}
+          {user.name}
         </Typography>
       </Box>
       <Divider />
@@ -58,7 +58,7 @@ export const AccountPopover = (props) => {
   );
 };
 
-AccountPopover.propTypes = {
+AccountPopoverClient.propTypes = {
   anchorEl: PropTypes.any,
   onClose: PropTypes.func,
   open: PropTypes.bool.isRequired,

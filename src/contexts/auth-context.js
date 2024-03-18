@@ -259,27 +259,26 @@ export const AuthProvider = (props) => {
 
     if (isAuthenticated) {
       // Si la connexion réussit, effectuez une requête pour récupérer les données de l'utilisateur
-      const response = await axios.get(`${requete.admin}/user_info_admin`);
-      const userInfo = response.data;
-      console.log(userInfo);
-      const user = {
-        id: userInfo.user._id,
+      try {
+        const response = await axios.get(`${requete.admin}/admin_verify_token`);
+        const userInfo = response.data;
+        console.log(userInfo);
+         const user = {
+        id: userInfo.admin._id,
         avatar: "/assets/avatars/avatar-anika-visser.png",
-        name: userInfo.user.pseudo,
-        identifier: userInfo.user.pseudo,
+        name: userInfo.admin.name,
+        role: userInfo.admin.role,
       };
-      console.log(user);
-      // const user = {
-      //   id: "5e86809283e28b96d2d38537",
-      //   avatar: "/assets/avatars/avatar-anika-visser.png",
-      //   name: "Anika Visser Abdias",
-      //   identifier: "anika.visser@devias.io",
-      // };
-
       dispatch({
         type: HANDLERS.INITIALIZE,
         payload: user,
       });
+        // console.log(user);
+      } catch (error) {
+        console.log(error);
+      }
+
+    
     } else {
       dispatch({
         type: HANDLERS.INITIALIZE,
@@ -310,17 +309,22 @@ export const AuthProvider = (props) => {
         { withCredentials: true }
       );
       console.log(login.data);
-      const response = await axios.get(`${requete.admin}/admin_verify_token`);
-      const userInfo = response.data;
+
+      const response = await axios.get(`${requete.admin}/admin_verify_token`, {
+        withCredentials: true,
+      });
+      const userInfo = await response.data;
       console.log(userInfo);
       const user = {
-        id: userInfo.user._id,
+        id: userInfo.admin._id,
         avatar: "/assets/avatars/avatar-anika-visser.png",
-        name: userInfo.user.name,
-        identifier: userInfo.user.role,
+        name: userInfo.admin.name,
+       role: userInfo.admin.role, 
       };
       console.log(user);
+
       window.sessionStorage.setItem("authenticated", "true");
+
       dispatch({
         type: HANDLERS.SIGN_IN,
         payload: user,
@@ -336,10 +340,27 @@ export const AuthProvider = (props) => {
     throw new Error("Sign up is not implemented");
   };
 
-  const signOut = () => {
-    dispatch({
-      type: HANDLERS.SIGN_OUT,
-    });
+
+  const signOut = async () => {
+    try {
+      const response = await axios.post(
+        `${requete.admin}/logout_admin`// Utilisez l'API pour gérer la déconnexion côté serveur
+      );
+
+      if (response.status === 200) {
+        // Effacer les données d'authentification côté client
+        window.sessionStorage.removeItem("authenticated");
+        // Mettre à jour l'état de l'authentification
+        dispatch({
+          type: HANDLERS.SIGN_OUT,
+        });
+      
+      } else {
+        console.error("Failed to sign out:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error during sign out:", error);
+    }
   };
 
   return (

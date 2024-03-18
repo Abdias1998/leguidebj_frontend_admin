@@ -94,7 +94,7 @@ export const OverviewLatestOrders = (props) => {
 
   return (
    <>
-   {user?.isAdminPrincipal &&   <Card sx={sx}>
+   {  <Card sx={sx}>
       <CardHeader title="Liste des admins" />
       <Scrollbar sx={{ flexGrow: 1 }}>
         <Box sx={{ minWidth: 800 }}>
