@@ -247,98 +247,94 @@ export const AuthProvider = (props) => {
     if (initialized.current) {
       return;
     }
-
+  
     initialized.current = true;
-
+  
     let isAuthenticated = false;
-
-    // try {
-    //   isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
-    // } catch (err) {
-    //   console.error(err);
-    // }
-
+  
+    try {
+      isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
+    } catch (err) {
+      console.error(err);
+    }
+  
     if (isAuthenticated) {
-      // Si la connexion réussit, effectuez une requête pour récupérer les données de l'utilisateur
+      // Si l'utilisateur est authentifié, récupérez son ID depuis le sessionStorage
+      const userId = window.sessionStorage.getItem("userId");
+  
+      // Utilisez l'ID de l'utilisateur pour récupérer ses informations depuis le backend
       try {
-        const response = await axios.get(`${requete.admin}/admin_verify_token`);
-        const userInfo = response.data;
-        console.log(userInfo);
-         const user = {
-        id: userInfo.admin._id,
-        avatar: "/assets/avatars/avatar-anika-visser.png",
-        name: userInfo.admin.name,
-        role: userInfo.admin.role,
-      };
-      dispatch({
-        type: HANDLERS.INITIALIZE,
-        payload: user,
-      });
-        // console.log(user);
+        const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
+          withCredentials: true,
+        });
+  
+        const userInfo = response.data.message;
+        const user = {
+          id: userInfo._id,
+          avatar: "/assets/avatars/avatar-anika-visser.png",
+          name: userInfo.name,
+          role: userInfo.role,
+        };
+  
+        dispatch({
+          type: HANDLERS.INITIALIZE,
+          payload: user,
+        });
       } catch (error) {
         console.error(error);
         throw new Error(error.response.data.message);
       }
-
-    
     } else {
       dispatch({
         type: HANDLERS.INITIALIZE,
       });
     }
   };
+  
 
   useEffect(
     () => {
+
       initialize();
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
   const signIn = async (identifier, password) => {
-    // if (identifier !== "demo@devias.io" || password !== "Password123!") {
-    //   throw new Error("Please check your identifier and password");
-    // }
-
     try {
-      // Effectuez une requête pour vérifier les identifiants de connexion
-      const login = await axios.post(
-        `${requete.admin}/login_admin_role`,
-        {
-          identifier,
-          password,
-        }
-      );
-      console.log(login.data);
-      if(login.status === 200) {
-        const response = await axios.get(`${requete.admin}/admin_verify_token`, {
+      const login = await axios.post(`${requete.admin}/login_admin_role`, {
+        identifier,
+        password,
+      });
+  
+      if (login.status === 200) {
+        const response = await axios.get(`${requete.admin}/admin_profil_info/${login.data.id}`, {
           withCredentials: true,
         });
-        const userInfo = await response.data;
-        console.log(userInfo);
+  
+        const userInfo = response.data.message;
         const user = {
-          id: userInfo.id,
+          id: userInfo._id,
           avatar: "/assets/avatars/avatar-anika-visser.png",
           name: userInfo.name,
-         role: userInfo.role, 
+          role: userInfo.role,
         };
-        console.log("log" + userInfo);
   
+        // Stocker l'ID de l'utilisateur dans le sessionStorage
+        window.sessionStorage.setItem("userId", userInfo._id);
         window.sessionStorage.setItem("authenticated", "true");
-        
-      dispatch({
-        type: HANDLERS.SIGN_IN,
-        payload: userInfo,
-      });
+  
+        dispatch({
+          type: HANDLERS.SIGN_IN,
+          payload: user,
+        });
       }
-
-     
-
     } catch (error) {
       console.error(error);
       throw new Error(error.response.data.message);
     }
   };
+  
 
   // ... Le reste de votre code reste inchangé ...
   const signUp = async (identifier, name, password) => {
@@ -348,21 +344,18 @@ export const AuthProvider = (props) => {
 
   const signOut = async () => {
     try {
-      const response = await axios.post(
-        `${requete.admin}/logout_admin`// Utilisez l'API pour gérer la déconnexion côté serveur
-      );
 
-      if (response.status === 200) {
+
+     
         // Effacer les données d'authentification côté client
         window.sessionStorage.removeItem("authenticated");
+        window.sessionStorage.removeItem("userId");
         // Mettre à jour l'état de l'authentification
         dispatch({
           type: HANDLERS.SIGN_OUT,
         });
       
-      } else {
-        console.error("Failed to sign out:", response.data.message);
-      }
+   
     } catch (error) {
       console.error("Error during sign out:", error);
     }
