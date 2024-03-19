@@ -172,7 +172,6 @@ import { createContext, useContext, useEffect, useReducer, useRef } from "react"
 import PropTypes from "prop-types";
 import axios from "axios"; // Importez Axios ou la bibliothèque HTTP de votre choix
 import { requete } from "src/env/requete";
-
 axios.defaults.withCredentials = true;
 const HANDLERS = {
   INITIALIZE: "INITIALIZE",
@@ -242,59 +241,8 @@ export const AuthProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const initialized = useRef(false);
 
-  const initialize = async () => {
-    // Prevent from calling twice in development mode with React.StrictMode enabled
-    if (initialized.current) {
-      return;
-    }
 
-    initialized.current = true;
-
-    let isAuthenticated = false;
-
-    // try {
-    //   isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
-    // } catch (err) {
-    //   console.error(err);
-    // }
-
-    if (isAuthenticated) {
-      // Si la connexion réussit, effectuez une requête pour récupérer les données de l'utilisateur
-      try {
-        const response = await axios.get(`${requete.admin}/admin_verify_token`);
-        const userInfo = response.data;
-        console.log(userInfo);
-         const user = {
-        id: userInfo.admin._id,
-        avatar: "/assets/avatars/avatar-anika-visser.png",
-        name: userInfo.admin.name,
-        role: userInfo.admin.role,
-      };
-      dispatch({
-        type: HANDLERS.INITIALIZE,
-        payload: user,
-      });
-        // console.log(user);
-      } catch (error) {
-        console.error(error);
-        throw new Error(error.response.data.message);
-      }
-
-    
-    } else {
-      dispatch({
-        type: HANDLERS.INITIALIZE,
-      });
-    }
-  };
-
-  useEffect(
-    () => {
-      initialize();
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    []
-  );
+  
   const signIn = async (identifier, password) => {
     // if (identifier !== "demo@devias.io" || password !== "Password123!") {
     //   throw new Error("Please check your identifier and password");
@@ -310,30 +258,24 @@ export const AuthProvider = (props) => {
         }
       );
       console.log(login.data);
-      if(login.status === 200) {
-        const response = await axios.get(`${requete.admin}/admin_verify_token`, {
-          withCredentials: true,
-        });
-        const userInfo = await response.data;
-        console.log(userInfo);
-        const user = {
-          id: userInfo.id,
-          avatar: "/assets/avatars/avatar-anika-visser.png",
-          name: userInfo.name,
-         role: userInfo.role, 
-        };
-        console.log("log" + userInfo);
-  
-        window.sessionStorage.setItem("authenticated", "true");
-        
+
+    
+      const userInfo = await response.data;
+      console.log(userInfo);
+      const user = {
+        id: userInfo.admin._id,
+        avatar: "/assets/avatars/avatar-anika-visser.png",
+        name: userInfo.admin.name,
+       role: userInfo.admin.role, 
+      };
+      console.log(user);
+
+      window.sessionStorage.setItem("authenticated", "true");
+
       dispatch({
         type: HANDLERS.SIGN_IN,
-        payload: userInfo,
+        payload: user,
       });
-      }
-
-     
-
     } catch (error) {
       console.error(error);
       throw new Error(error.response.data.message);
@@ -346,27 +288,7 @@ export const AuthProvider = (props) => {
   };
 
 
-  const signOut = async () => {
-    try {
-      const response = await axios.post(
-        `${requete.admin}/logout_admin`// Utilisez l'API pour gérer la déconnexion côté serveur
-      );
 
-      if (response.status === 200) {
-        // Effacer les données d'authentification côté client
-        window.sessionStorage.removeItem("authenticated");
-        // Mettre à jour l'état de l'authentification
-        dispatch({
-          type: HANDLERS.SIGN_OUT,
-        });
-      
-      } else {
-        console.error("Failed to sign out:", response.data.message);
-      }
-    } catch (error) {
-      console.error("Error during sign out:", error);
-    }
-  };
 
   return (
     <AuthContext.Provider
@@ -375,7 +297,7 @@ export const AuthProvider = (props) => {
 
         signIn,
         signUp,
-        signOut,
+    
       }}
     >
       {children}
