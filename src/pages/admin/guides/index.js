@@ -303,7 +303,21 @@ const Page = () => {
       [name]: files[0],
     });
   };
+const handleSendPdf =async () =>{
+  const res = await axios.get(`${requete.admin}/send_pdf_all_guide`)
 
+  try {
+    if(res.status === 201){
+      alert('Liste envoyé')
+    } 
+  } catch (error) {
+    console.log(error);
+  }
+ 
+
+
+  
+}
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -379,12 +393,14 @@ const Page = () => {
                     </SvgIcon>
                   }
                   variant="contained"
+                  onClick={() => handleSendPdf()}
                 >
-                  Add
+                Envoyer la liste des guides
                 </Button>
               </div>
             </Stack>
             {/* <CustomersSearch /> */}
+           
             <PaginationCard />
             {/* <CustomersTable
               // count={data.length}
@@ -401,6 +417,7 @@ const Page = () => {
             /> */}
           </Stack>
           <br />
+          <Typography variant="h4">Créer un guide</Typography>
           <Container>
             <form onSubmit={handleSubmit}>
               <Grid container spacing={2}>

@@ -105,7 +105,7 @@ const Page = () => (
           >
             <DashboardTaskProgress
               sx={{ height: '100%' }}
-              value={75.5}
+           
             />
           </Grid>
           <Grid xs={12} sm={6} lg={3}>

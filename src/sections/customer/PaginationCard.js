@@ -53,7 +53,9 @@ const PaginationPage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDesactiveModalOpen, setIsDesactiveModalOpen] = useState(false);
   const [videoToDelete, setVideoToDelete] = useState(null);
+  const [videoToDesactive, setVideoToDesactive] = useState(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false); // État pour le modal d'informations
   const [infoMessage, setInfoMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false); // Pour gérer le style du message d'informations
@@ -104,7 +106,10 @@ const PaginationPage = () => {
 
         if (response.status === 200) {
           // Modification réussie
+          
           handleEditSuccess(); // Fermez le modal de modification et affichez un message de succès
+          setInfoMessage(response.data.message);
+          setIsSuccess(true);
         } else {
           // Erreur de modification
           console.error("Erreur lors de la modification.");
@@ -325,24 +330,67 @@ const PaginationPage = () => {
     setPage(0);
   };
 
-  const handleSearch = (e) => {
-    const searchValue = e.target.value;
-    setSearchTerm(searchValue);
+  // const handleSearch = (e) => {
+  //   const searchValue = e.target.value;
+  //   setSearchTerm(searchValue);
 
+  //   const filtered = data.filter((item) => {
+  //     if (item.zone && typeof item.zone === "string") {
+  //       return item.zone.toLowerCase().includes(searchValue.toLowerCase());
+  //     }
+  //     return false;
+  //   });
+  //   setFilteredData(filtered);
+  // };
+  const handleSearch = (e) => {
+    const searchValue = e.target.value // Convertir la valeur de recherche en minuscules
+setSearchTerm(searchValue)
     const filtered = data.filter((item) => {
-      if (item.zone && typeof item.zone === "string") {
-        return item.zone.toLowerCase().includes(searchValue.toLowerCase());
+      // Vérifier si la zone correspond à la valeur de recherche
+      if (item.zone && item.zone.toLowerCase().includes(searchValue)) {
+        return true;
       }
-      return false;
+      // Vérifier si la langue correspond à la valeur de recherche
+      if (item.language && item.language.toLowerCase().includes(searchValue)) {
+        return true;
+      }
+      // Vérifier si l'e-mail correspond à la valeur de recherche
+      if (item.email && item.email.toLowerCase().includes(searchValue)) {
+        return true;
+      }
+      // Vérifier si le nom correspond à la valeur de recherche
+      if (item.names && item.names.toLowerCase().includes(searchValue)) {
+        return true;
+      }
+      // Vérifier si le numéro de téléphone correspond à la valeur de recherche
+      if (item.tel && item.tel.toLowerCase().includes(searchValue)) {
+        return true;
+      }
+      // Vérifier si la disponibilité correspond à la valeur de recherche
+      if (item.available && item.available.toLowerCase().includes(searchValue)) {
+        return true;
+      }
+      // Vérifier si le pays correspond à la valeur de recherche
+      if (item.country && item.country.toLowerCase().includes(searchValue)) {
+        return true;
+      }
+      return false; // Aucune correspondance trouvée
     });
-    setFilteredData(filtered);
+  
+    setFilteredData(filtered); // Mettre à jour les données filtrées
   };
+  
 
   const paginatedData = filteredData.slice(page * rowsPerPage, (page + 1) * rowsPerPage);
 
   const handleDeleteVideo = (video) => {
     setVideoToDelete(video);
     setIsDeleteModalOpen(true);
+  };
+
+  const handleDesactiveVideo = (video) => {
+    setVideoToDesactive(video);
+    setIsDesactiveModalOpen(true);
   };
 
   const confirmDelete = async () => {
@@ -370,9 +418,37 @@ const PaginationPage = () => {
       }
     }
   };
+  const confirmDesactive = async () => {
+    if (videoToDesactive) {
+      try {
+        // Envoyer une requête de suppression
+        const response = await axios.put(`${requete.admin}/disebale-guide/${videoToDesactive._id}`);
+
+        if (response.status === 200) {
+          // Suppression réussie
+          setInfoMessage("Désactivation réussie.");
+          setIsSuccess(true);
+        } else {
+          // Erreur de suppression
+          setInfoMessage("Erreur lors de la désactivation.");
+          setIsSuccess(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setInfoMessage("Erreur lors de la désactivation.");
+        setIsSuccess(false);
+      } finally {
+        setIsInfoModalOpen(true);
+        setIsDesactiveModalOpen(false);
+      }
+    }
+  };
 
   const cancelDelete = () => {
     setIsDeleteModalOpen(false);
+  };
+  const cancelDesactive = () => {
+    setIsDesactiveModalOpen(false);
   };
 
   const closeInfoModal = () => {
@@ -395,7 +471,7 @@ const PaginationPage = () => {
 
   return (
     <div>
-      <h1>Pagination </h1>
+    
       {/* <VideoPlayer /> */}
       <Card sx={{ p: 2 }}>
         <OutlinedInput
@@ -421,11 +497,12 @@ const PaginationPage = () => {
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Id</TableCell>
+              <TableCell>names</TableCell>
+                <TableCell>Email</TableCell>
                 <TableCell>Supprimer</TableCell>
                 <TableCell>Modifier</TableCell>
-                <TableCell>names</TableCell>
-                <TableCell>Email</TableCell>
+                <TableCell>Désactiver</TableCell>
+               
                 <TableCell>Membre dépuis</TableCell>
 
                 <TableCell>Code</TableCell>
@@ -436,12 +513,15 @@ const PaginationPage = () => {
                 <TableCell>Disponibilité</TableCell>
                 <TableCell>Expérience</TableCell>
                 <TableCell>Description</TableCell>
+                <TableCell>Id</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {paginatedData.map((item) => (
-                <TableRow key={item._id}>
-                  <TableCell>{item._id}</TableCell>
+                <TableRow style={{background:item.is_active !== true ? "gray": "green"}} key={item._id}>
+             
+             <TableCell>{item.names}</TableCell>
+                  <TableCell>{item.email}</TableCell>
                   <TableCell>
                     <Button
                       variant="contained"
@@ -456,9 +536,16 @@ const PaginationPage = () => {
                       Modifier
                     </Button>
                   </TableCell>
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleDesactiveVideo(item)}
+                      color="warning"
+                    >
+                    Désactiver
+                    </Button>
+                  </TableCell>
 
-                  <TableCell>{item.names}</TableCell>
-                  <TableCell>{item.email}</TableCell>
                   <TableCell>{`${ getDateInscription(item.createdAt)}`}</TableCell>
           
                   <TableCell>{item.code}</TableCell>
@@ -469,6 +556,7 @@ const PaginationPage = () => {
                   <TableCell>{item.available}</TableCell>
                   <TableCell>{item.experience}</TableCell>
                   <TableCell>{truncate(item.description, 50)}</TableCell>
+                  <TableCell>{item._id}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -495,6 +583,18 @@ const PaginationPage = () => {
           </Button>
           <Button onClick={confirmDelete} color="error">
             Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={isDesactiveModalOpen} onClose={cancelDesactive}>
+        <DialogTitle>Confirmer la dsactivation</DialogTitle>
+        <DialogContent>Êtes-vous sûr de vouloir désactiver ce guide ?</DialogContent>
+        <DialogActions>
+          <Button onClick={cancelDesactive} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={confirmDesactive} color="error">
+            Désactiver
           </Button>
         </DialogActions>
       </Dialog>

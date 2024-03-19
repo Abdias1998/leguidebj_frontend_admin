@@ -26,7 +26,7 @@ import { Container } from "@mui/system";
 
 const itemsPerPageOptions = [5, 10, 25, 50, 100, 150, 200, 300];
 
-const AdminPagination = () => {
+const UsersPagination = () => {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(itemsPerPageOptions[1]);
   const [data, setData] = useState([]);
@@ -47,7 +47,7 @@ const AdminPagination = () => {
 
   const getAdmins = async () => {
     try {
-      const res = await axios.get(`${requete.admin}/retrieve_all_admin`);
+      const res = await axios.get(`${requete.admin}/get_all_users`);
       setData(res.data);
       setFilteredData(res.data);
       setInfoMessage("Requête réussie !");
@@ -123,7 +123,7 @@ const AdminPagination = () => {
 
   return (
     <div>
-    
+   
       <Card sx={{ p: 2 }}>
         <OutlinedInput
           fullWidth
@@ -151,8 +151,8 @@ const AdminPagination = () => {
                
                 <TableCell>Nom</TableCell>
                 <TableCell>Email</TableCell>
-                <TableCell>Tel</TableCell>
-                <TableCell>Role</TableCell>
+                
+                <TableCell>Bannie</TableCell>
                 <TableCell>Supprimer</TableCell>
               </TableRow>
             </TableHead>
@@ -162,8 +162,18 @@ const AdminPagination = () => {
                 
                   <TableCell>{admin.name}</TableCell>
                   <TableCell>{admin.email}</TableCell>
-                  <TableCell>{admin.tel}</TableCell>
-                  <TableCell>{admin.role}</TableCell>
+               
+             
+                  <TableCell>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleDeleteAdmin(admin)}
+                      color="warning"
+                    >
+                  Bannie
+                    </Button>
+                  </TableCell>
+             
                   <TableCell>
                     <Button
                       variant="contained"
@@ -215,4 +225,4 @@ const AdminPagination = () => {
   );
 };
 
-export default AdminPagination;
+export default UsersPagination;

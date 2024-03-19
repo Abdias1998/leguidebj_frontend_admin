@@ -41,10 +41,10 @@ export const DashboardTaskProgress = (props) => {
               gutterBottom
               variant="overline"
             >
-              Task Progress
+           Objectif utilisateur progression
             </Typography>
             <Typography variant="h4">
-              {users?.length}%
+              {users?.length/100}%
             </Typography>
           </Stack>
           <Avatar
@@ -61,7 +61,7 @@ export const DashboardTaskProgress = (props) => {
         </Stack>
         <Box sx={{ mt: 3 }}>
           <LinearProgress
-            value={1000}
+            value={users?.length}
             variant="determinate"
           />
         </Box>
