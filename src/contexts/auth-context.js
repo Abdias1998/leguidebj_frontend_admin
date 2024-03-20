@@ -255,7 +255,7 @@ export const AuthProvider = (props) => {
   
     try {
       // isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
-
+      isAuthenticated = true
       function getCookie(name) {
         const value = `; ${document.cookie}`;
         const parts = value.split(`; ${name}=`);
@@ -276,16 +276,16 @@ try {
   if (jwt) {
     // Le cookie existe, vous pouvez maintenant décoder le JWT
     const jwtPayload = JSON.parse(atob(jwt.split('.')[1])); // Décoder le payload du JWT
-    isAuthenticated = true
+  
     if (jwtPayload && jwtPayload.id) {
         // L'ID existe dans le JWT payload
         const id = jwtPayload.id;
         console.log('ID extrait du JWT :', id);
 
         // Vérifier si l'ID respecte le nombre de caractères de Mongoose
-        if (id.length === 24) {
+        if (id?.length === 24) {
             console.log('L\'ID respecte la longueur attendue.');
-            isAuthenticated = true
+           
             const response = await axios.get(`${requete.admin}/admin_profil_info/${id}`, {
                       withCredentials: true,
                     });

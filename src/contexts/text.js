@@ -251,31 +251,20 @@ export const AuthProvider = (props) => {
     initialized.current = true;
   
     let isAuthenticated = false;
-  let cookieIdentified = null
+  
     try {
-      // isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
-      function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-      }
-      
-      // Récupérer la valeur de l'ID à partir du cookie "userId"
-      const userId = getCookie('userId');
-      cookieIdentified = userId
-      // Utilisez l'ID récupéré selon vos besoins
-      console.log(userId); 
+      isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
     } catch (err) {
       console.error(err);
     }
   
-    if (cookieIdentified) {
+    if (isAuthenticated) {
       // Si l'utilisateur est authentifié, récupérez son ID depuis le sessionStorage
-      window.sessionStorage.setItem("authenticated", "true");
+      const userId = window.sessionStorage.getItem("userId");
   
       // Utilisez l'ID de l'utilisateur pour récupérer ses informations depuis le backend
       try {
-        const response = await axios.get(`${requete.admin}/admin_profil_info/${cookieIdentified}`, {
+        const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
           withCredentials: true,
         });
   
@@ -319,28 +308,7 @@ export const AuthProvider = (props) => {
       });
   
       if (login.status === 200) {
-
-        const token = login.data.id;
-     console.log(token);
-      // Stocker l'ID de l'utilisateur dans un cookie
-      document.cookie = `userId=${token}; path=/; expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)};`;
-
-        // Diviser le token en ses trois parties distinctes
-        const parts = token.split('.');
-        
-        // La partie du corps (payload) est encodée en base64, donc nous devons la décoder
-        const decodedPayload = atob(parts[1]);
-        
-        // Convertir la chaîne JSON décodée en objet JavaScript
-        const payloadObj = JSON.parse(decodedPayload);
-        
-        // Extraire l'ID de l'objet payload
-        const userId = payloadObj.id;
-        
-        // console.log(userId); // Cela devrait afficher l'ID extrait du token JWT
-        
-
-        const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
+        const response = await axios.get(`${requete.admin}/admin_profil_info/${login.data.id}`, {
           withCredentials: true,
         });
   
@@ -352,8 +320,8 @@ export const AuthProvider = (props) => {
           role: userInfo.role,
         };
   
-        // // Stocker l'ID de l'utilisateur dans le sessionStorage
-        // window.sessionStorage.setItem("userId", userInfo._id);
+        // Stocker l'ID de l'utilisateur dans le sessionStorage
+        window.sessionStorage.setItem("userId", userInfo._id);
         window.sessionStorage.setItem("authenticated", "true");
   
         dispatch({
@@ -363,7 +331,7 @@ export const AuthProvider = (props) => {
       }
     } catch (error) {
       console.error(error);
-      throw new Error(error.response.data.message ?error.response.data.message : error.message);
+      throw new Error(error.response.data.message);
     }
   };
   
