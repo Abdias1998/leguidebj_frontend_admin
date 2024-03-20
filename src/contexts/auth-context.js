@@ -440,7 +440,7 @@ const initialize = async () => {
 
   if (jwt) {
     // Le cookie existe, vous pouvez maintenant décoder le JWT
-    const jwtPayload = JSON.parse(atob(jwt.split('.')[1])); // Décoder le payload du JWT
+    const jwtPayload = JSON.parse(atob(jwt?.split('.')[1])); // Décoder le payload du JWT
   
     if (jwtPayload && jwtPayload.id) {
         // L'ID existe dans le JWT payload
