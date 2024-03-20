@@ -392,7 +392,15 @@ const initialize = async () => {
   let isAuthenticated = false;
 
   try {
-    isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
+    // isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
+         const getCookie = async (name) => {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+    }
+    
+isAuthenticated = true
+     jwt = getCookie('userId');
   } catch (err) {
     console.error(err);
   }
