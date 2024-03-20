@@ -623,22 +623,18 @@ isAuthenticated = true
 
   const signOut = async () => {
     try {
-
-
-     
-        // Effacer les données d'authentification côté client
-        window.sessionStorage.removeItem("authenticated");
-        window.sessionStorage.removeItem("userId");
-        // Mettre à jour l'état de l'authentification
-        dispatch({
-          type: HANDLERS.SIGN_OUT,
-        });
-      
-   
+      // Supprimer le cookie 'userId'
+      document.cookie = 'userId=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+  
+      // Mettre à jour l'état de l'authentification
+      dispatch({
+        type: HANDLERS.SIGN_OUT,
+      });
     } catch (error) {
-      console.error("Error during sign out:", error);
+      console.error("Erreur lors de la déconnexion :", error);
     }
   };
+  
 
   return (
     <AuthContext.Provider
