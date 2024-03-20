@@ -242,146 +242,193 @@ export const AuthProvider = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   const initialized = useRef(false);
 
-  const initialize = async () => {
-    // Prevent from calling twice in development mode with React.StrictMode enabled
-    if (initialized.current) {
-      return;
-    }
+//   const initialize = async () => {
+//     // Prevent from calling twice in development mode with React.StrictMode enabled
+//     if (initialized.current) {
+//       return;
+//     }
   
-    initialized.current = true;
+//     initialized.current = true;
   
-    let isAuthenticated = false;
-    let jwt
+//     let isAuthenticated = false;
+//     let jwt
   
-    try {
-      // isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
-      isAuthenticated = true
-      function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    }
+//     try {
+//       // isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
+//       isAuthenticated = true
+//       function getCookie(name) {
+//         const value = `; ${document.cookie}`;
+//         const parts = value.split(`; ${name}=`);
+//         if (parts.length === 2) return parts.pop().split(';').shift();
+//     }
     
 
-     jwt = getCookie('userId');
+//      jwt = getCookie('userId');
      
     
-    } 
+//     } 
     
-    catch (err) {
-      console.error(err);
-    }
+//     catch (err) {
+//       console.error(err);
+//     }
 
-try {
-  if (jwt) {
-    // Le cookie existe, vous pouvez maintenant décoder le JWT
-    const jwtPayload = JSON.parse(atob(jwt.split('.')[1])); // Décoder le payload du JWT
+// try {
+//   if (jwt) {
+//     // Le cookie existe, vous pouvez maintenant décoder le JWT
+//     const jwtPayload = JSON.parse(atob(jwt.split('.')[1])); // Décoder le payload du JWT
   
-    if (jwtPayload && jwtPayload.id) {
-        // L'ID existe dans le JWT payload
-        const id = jwtPayload.id;
-        console.log('ID extrait du JWT :', id);
+//     if (jwtPayload && jwtPayload.id) {
+//         // L'ID existe dans le JWT payload
+//         const id = jwtPayload.id;
+//         console.log('ID extrait du JWT :', id);
 
-        // Vérifier si l'ID respecte le nombre de caractères de Mongoose
-        if (id?.length === 24) {
-            console.log('L\'ID respecte la longueur attendue.');
+//         // Vérifier si l'ID respecte le nombre de caractères de Mongoose
+//         if (id?.length === 24) {
+//             console.log('L\'ID respecte la longueur attendue.');
            
-            const response = await axios.get(`${requete.admin}/admin_profil_info/${id}`, {
-                      withCredentials: true,
-                    });
+//             const response = await axios.get(`${requete.admin}/admin_profil_info/${id}`, {
+//                       withCredentials: true,
+//                     });
 
-                    const userInfo = response.data.message;
-                    const user = {
-                      id: userInfo._id,
-                      avatar: "/assets/avatars/avatar-anika-visser.png",
-                      name: userInfo.name,
-                      role: userInfo.role,
-                    };
+//                     const userInfo = response.data.message;
+//                     const user = {
+//                       id: userInfo._id,
+//                       avatar: "/assets/avatars/avatar-anika-visser.png",
+//                       name: userInfo.name,
+//                       role: userInfo.role,
+//                     };
               
-                    dispatch({
-                      type: HANDLERS.INITIALIZE,
-                      payload: user,
-                    });
-        } else {
-            console.log('L\'ID ne respecte pas la longueur attendue.');
-        }
-    } else {
-        console.log('Le JWT ne contient pas de champ "id".');
+//                     dispatch({
+//                       type: HANDLERS.INITIALIZE,
+//                       payload: user,
+//                     });
+//         } else {
+//             console.log('L\'ID ne respecte pas la longueur attendue.');
+//         }
+//     } else {
+//         console.log('Le JWT ne contient pas de champ "id".');
+//     }
+// } 
+
+// else {
+//   dispatch({
+//     type: HANDLERS.INITIALIZE,
+//   });
+// }
+// } catch (error) {
+//   console.log(error);
+// }
+
+//   //   if (jwt) {
+//   //     // Le cookie existe, vous pouvez utiliser sa valeur
+//   //     console.log('La valeur du cookie est :', cookieValue);
+//   //     try {
+//   //       const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
+//   //         withCredentials: true,
+//   //       });
+  
+//         // const userInfo = response.data.message;
+//         // const user = {
+//         //   id: userInfo._id,
+//         //   avatar: "/assets/avatars/avatar-anika-visser.png",
+//         //   name: userInfo.name,
+//         //   role: userInfo.role,
+//         // };
+  
+//         // dispatch({
+//         //   type: HANDLERS.INITIALIZE,
+//         //   payload: user,
+//         // });
+//   //     } catch (error) {
+//   //       console.error(error);
+//   //       throw new Error(error.response.data.message);
+//   //     }
+//   // } else {
+//   //     // Le cookie n'existe pas
+//   //     console.log('Le cookie nomDuCookie n\'existe pas.');
+//   // }
+
+//     // if (isAuthenticated) {
+//     //   // Si l'utilisateur est authentifié, récupérez son ID depuis le sessionStorage
+//     //   const userId = window.sessionStorage.getItem("userId");
+  
+//     //   // Utilisez l'ID de l'utilisateur pour récupérer ses informations depuis le backend
+//     //   try {
+//     //     const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
+//     //       withCredentials: true,
+//     //     });
+  
+//     //     const userInfo = response.data.message;
+//     //     const user = {
+//     //       id: userInfo._id,
+//     //       avatar: "/assets/avatars/avatar-anika-visser.png",
+//     //       name: userInfo.name,
+//     //       role: userInfo.role,
+//     //     };
+  
+//     //     dispatch({
+//     //       type: HANDLERS.INITIALIZE,
+//     //       payload: user,
+//     //     });
+//     //   } catch (error) {
+//     //     console.error(error);
+//     //     throw new Error(error.response.data.message);
+//     //   }
+//     // } else {
+//     //   dispatch({
+//     //     type: HANDLERS.INITIALIZE,
+//     //   });
+//     // }
+//   };
+  
+const initialize = async () => {
+  // Prevent from calling twice in development mode with React.StrictMode enabled
+  if (initialized.current) {
+    return;
+  }
+
+  initialized.current = true;
+
+  let isAuthenticated = false;
+
+  try {
+    isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
+  } catch (err) {
+    console.error(err);
+  }
+
+  if (isAuthenticated) {
+    // Si l'utilisateur est authentifié, récupérez son ID depuis le sessionStorage
+    const userId = window.sessionStorage.getItem("userId");
+
+    // Utilisez l'ID de l'utilisateur pour récupérer ses informations depuis le backend
+    try {
+      const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
+        withCredentials: true,
+      });
+
+      const userInfo = response.data.message;
+      const user = {
+        id: userInfo._id,
+        avatar: "/assets/avatars/avatar-anika-visser.png",
+        name: userInfo.name,
+        role: userInfo.role,
+      };
+
+      dispatch({
+        type: HANDLERS.INITIALIZE,
+        payload: user,
+      });
+    } catch (error) {
+      console.error(error);
+      throw new Error(error.response.data.message);
     }
-} 
-
-else {
-  dispatch({
-    type: HANDLERS.INITIALIZE,
-  });
-}
-} catch (error) {
-  console.log(error);
-}
-
-  //   if (jwt) {
-  //     // Le cookie existe, vous pouvez utiliser sa valeur
-  //     console.log('La valeur du cookie est :', cookieValue);
-  //     try {
-  //       const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
-  //         withCredentials: true,
-  //       });
-  
-        // const userInfo = response.data.message;
-        // const user = {
-        //   id: userInfo._id,
-        //   avatar: "/assets/avatars/avatar-anika-visser.png",
-        //   name: userInfo.name,
-        //   role: userInfo.role,
-        // };
-  
-        // dispatch({
-        //   type: HANDLERS.INITIALIZE,
-        //   payload: user,
-        // });
-  //     } catch (error) {
-  //       console.error(error);
-  //       throw new Error(error.response.data.message);
-  //     }
-  // } else {
-  //     // Le cookie n'existe pas
-  //     console.log('Le cookie nomDuCookie n\'existe pas.');
-  // }
-
-    // if (isAuthenticated) {
-    //   // Si l'utilisateur est authentifié, récupérez son ID depuis le sessionStorage
-    //   const userId = window.sessionStorage.getItem("userId");
-  
-    //   // Utilisez l'ID de l'utilisateur pour récupérer ses informations depuis le backend
-    //   try {
-    //     const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
-    //       withCredentials: true,
-    //     });
-  
-    //     const userInfo = response.data.message;
-    //     const user = {
-    //       id: userInfo._id,
-    //       avatar: "/assets/avatars/avatar-anika-visser.png",
-    //       name: userInfo.name,
-    //       role: userInfo.role,
-    //     };
-  
-    //     dispatch({
-    //       type: HANDLERS.INITIALIZE,
-    //       payload: user,
-    //     });
-    //   } catch (error) {
-    //     console.error(error);
-    //     throw new Error(error.response.data.message);
-    //   }
-    // } else {
-    //   dispatch({
-    //     type: HANDLERS.INITIALIZE,
-    //   });
-    // }
-  };
-  
-
+  } else {
+    dispatch({
+      type: HANDLERS.INITIALIZE,
+    });
+  }
+};
   useEffect(
     () => {
 
