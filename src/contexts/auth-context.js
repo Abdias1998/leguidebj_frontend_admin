@@ -390,52 +390,96 @@ const initialize = async () => {
   initialized.current = true;
 
   let isAuthenticated = false;
-
+  let jwt 
+  
   try {
     // isAuthenticated = window.sessionStorage.getItem("authenticated") === "true";
-         const getCookie = async (name) => {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-    }
-    
-isAuthenticated = true
-     jwt = getCookie('userId');
+    const getCookie = async (name) => {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+  }
+  
+  
+   jwt = getCookie('userId');
   } catch (err) {
     console.error(err);
   }
 
-  if (isAuthenticated) {
-    // Si l'utilisateur est authentifié, récupérez son ID depuis le sessionStorage
-    const userId = window.sessionStorage.getItem("userId");
+  // if (isAuthenticated) {
+  //   // Si l'utilisateur est authentifié, récupérez son ID depuis le sessionStorage
+  //   const userId = window.sessionStorage.getItem("userId");
 
-    // Utilisez l'ID de l'utilisateur pour récupérer ses informations depuis le backend
-    try {
-      const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
-        withCredentials: true,
-      });
+  //   // Utilisez l'ID de l'utilisateur pour récupérer ses informations depuis le backend
+  //   try {
+  //     const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
+  //       withCredentials: true,
+  //     });
 
-      const userInfo = response.data.message;
-      const user = {
-        id: userInfo._id,
-        avatar: "/assets/avatars/avatar-anika-visser.png",
-        name: userInfo.name,
-        role: userInfo.role,
-      };
+  //     const userInfo = response.data.message;
+  //     const user = {
+  //       id: userInfo._id,
+  //       avatar: "/assets/avatars/avatar-anika-visser.png",
+  //       name: userInfo.name,
+  //       role: userInfo.role,
+  //     };
 
-      dispatch({
-        type: HANDLERS.INITIALIZE,
-        payload: user,
-      });
-    } catch (error) {
-      console.error(error);
-      throw new Error(error.response.data.message);
+  //     dispatch({
+  //       type: HANDLERS.INITIALIZE,
+  //       payload: user,
+  //     });
+  //   } catch (error) {
+  //     console.error(error);
+  //     throw new Error(error.response.data.message);
+  //   }
+  // } else {
+  //   dispatch({
+  //     type: HANDLERS.INITIALIZE,
+  //   });
+  // }
+
+  if (jwt) {
+    // Le cookie existe, vous pouvez maintenant décoder le JWT
+    const jwtPayload = JSON.parse(atob(jwt.split('.')[1])); // Décoder le payload du JWT
+  
+    if (jwtPayload && jwtPayload.id) {
+        // L'ID existe dans le JWT payload
+        const id = jwtPayload.id;
+        console.log('ID extrait du JWT :', id);
+
+        // Vérifier si l'ID respecte le nombre de caractères de Mongoose
+        if (id?.length === 24) {
+            console.log('L\'ID respecte la longueur attendue.');
+           
+            const response = await axios.get(`${requete.admin}/admin_profil_info/${id}`, {
+                      withCredentials: true,
+                    });
+
+                    const userInfo = response.data.message;
+                    const user = {
+                      id: userInfo._id,
+                      avatar: "/assets/avatars/avatar-anika-visser.png",
+                      name: userInfo.name,
+                      role: userInfo.role,
+                    };
+              
+                    dispatch({
+                      type: HANDLERS.INITIALIZE,
+                      payload: user,
+                    });
+        } else {
+            console.log('L\'ID ne respecte pas la longueur attendue.');
+        }
+    } else {
+        console.log('Le JWT ne contient pas de champ "id".');
     }
-  } else {
-    dispatch({
-      type: HANDLERS.INITIALIZE,
-    });
-  }
+} 
+
+ else {
+  dispatch({
+    type: HANDLERS.INITIALIZE,
+  });
+}
 };
   useEffect(
     () => {
