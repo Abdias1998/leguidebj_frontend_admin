@@ -392,59 +392,48 @@ else {
   );
   const signIn = async (identifier, password) => {
     try {
-      const login = await axios.post(`${requete.admin}/login_admin_role`, {
-        identifier,
-        password,
-      });
-  
-      if (login.status === 200) {
-
-        const token = login.data.id;
-     console.log(token);
-      // Stocker l'ID de l'utilisateur dans un cookie
-      document.cookie = `userId=${token}; path=/; expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)};`;
-
-        // Diviser le token en ses trois parties distinctes
-        const parts = token.split('.');
-        
-        // La partie du corps (payload) est encodée en base64, donc nous devons la décoder
-        const decodedPayload = atob(parts[1]);
-        
-        // Convertir la chaîne JSON décodée en objet JavaScript
-        const payloadObj = JSON.parse(decodedPayload);
-        
-        // Extraire l'ID de l'objet payload
-        const userId = payloadObj.id;
-        
-        // console.log(userId); // Cela devrait afficher l'ID extrait du token JWT
-        
-
-        const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
-          withCredentials: true,
+        const login = await axios.post(`${requete.admin}/login_admin_role`, {
+            identifier,
+            password,
         });
-  
-        const userInfo = response.data.message;
-        const user = {
-          id: userInfo._id,
-          avatar: "/assets/avatars/avatar-anika-visser.png",
-          name: userInfo.name,
-          role: userInfo.role,
-        };
-  
-        // // Stocker l'ID de l'utilisateur dans le sessionStorage
-        // window.sessionStorage.setItem("userId", userInfo._id);
-        // window.sessionStorage.setItem("authenticated", "true");
-  
-        dispatch({
-          type: HANDLERS.SIGN_IN,
-          payload: user,
-        });
-      }
+
+        if (login.status === 200) {
+            const token = login.data.id;
+
+            // Décoder le token JWT pour extraire l'ID utilisateur
+            const parts = token.split('.');
+            const decodedPayload = atob(parts[1]);
+            const payloadObj = JSON.parse(decodedPayload);
+            const userId = payloadObj.id;
+
+            // Stocker l'ID utilisateur dans le cookie
+            document.cookie = `userId=${userId}; path=/; expires=${new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)};`;
+
+            // Effectuer d'autres opérations nécessaires, comme récupérer les informations utilisateur depuis le backend
+            const response = await axios.get(`${requete.admin}/admin_profil_info/${userId}`, {
+                withCredentials: true,
+            });
+
+            const userInfo = response.data.message;
+            const user = {
+                id: userInfo._id,
+                avatar: "/assets/avatars/avatar-anika-visser.png",
+                name: userInfo.name,
+                role: userInfo.role,
+            };
+
+            // Dispatch l'action SIGN_IN avec les informations utilisateur
+            dispatch({
+                type: HANDLERS.SIGN_IN,
+                payload: user,
+            });
+        }
     } catch (error) {
-      console.error(error);
-      throw new Error(error.response.data.message ?error.response.data.message : error.message);
+        console.error(error);
+        throw new Error(error.response.data.message ? error.response.data.message : error.message);
     }
-  };
+};
+
   
 
   // ... Le reste de votre code reste inchangé ...
