@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import MagnifyingGlassIcon from "@heroicons/react/24/solid/MagnifyingGlassIcon";
-
+import Image from 'next/image'
 import {
   Card,
   Table,
@@ -497,6 +497,7 @@ setSearchTerm(searchValue)
           <Table>
             <TableHead>
               <TableRow>
+              <TableCell>Profil</TableCell>
               <TableCell>names</TableCell>
                 <TableCell>Email</TableCell>
                 <TableCell>Supprimer</TableCell>
@@ -520,6 +521,14 @@ setSearchTerm(searchValue)
               {paginatedData.map((item) => (
                 <TableRow style={{background:item.is_active !== true ? "gray": "green"}} key={item._id}>
              
+             <TableCell>{ <Image style={{borderRadius:"100%"}} 
+      src={item.document[0]} decoding="async" loading="lazy" data-nimg="1"
+      alt="Picture of the author"
+      width={50} 
+      height={50} 
+      // blurDataURL="data:..." automatically provided
+      // placeholder="blur" // Optional blur-up while loading
+    />}</TableCell>
              <TableCell>{item.names}</TableCell>
                   <TableCell>{item.email}</TableCell>
                   <TableCell>

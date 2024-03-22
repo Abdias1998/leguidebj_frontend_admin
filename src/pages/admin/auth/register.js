@@ -65,7 +65,7 @@ const Page = () => {
                 Already have an account? &nbsp;
                 <Link
                   component={NextLink}
-                  href="/admin/auth/login"
+                  href="/"
                   underline="hover"
                   variant="subtitle2"
                 >

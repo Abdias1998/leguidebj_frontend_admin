@@ -1,3 +1,4 @@
+
 import { useCallback, useMemo, useState } from "react";
 
 import {
@@ -264,6 +265,7 @@ const Page = () => {
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
 
+
   const handlePageChange = useCallback((event, value) => {
     setPage(value);
   }, []);
@@ -298,11 +300,16 @@ const Page = () => {
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
+    const fileList = Array.from(files); // Convertissez l'objet FileList en un tableau
     setFormData({
       ...formData,
-      [name]: files[0],
+      [name]: fileList, // Stockez les fichiers dans un tableau
     });
   };
+  
+  
+
+  
 const handleSendPdf =async () =>{
   const res = await axios.get(`${requete.admin}/send_pdf_all_guide`)
 
@@ -318,33 +325,37 @@ const handleSendPdf =async () =>{
 
   
 }
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    const form = new FormData();
-    for (const key in formData) {
+  const form = new FormData();
+  for (const key in formData) {
+    if (Array.isArray(formData[key])) {
+      formData[key].forEach((file) => {
+        form.append(key, file); // Ajoutez chaque fichier avec la même clé
+      });
+    } else {
       form.append(key, formData[key]);
     }
+  }
 
-    try {
-      // Utilisez Axios pour envoyer les données au serveur
-      const response = await axios.post(`${requete.admin}/register_guide`, form, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+  try {
+    const response = await axios.post(`${requete.admin}/register_guide`, form, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
 
-      if (response.status === 201) {
-        setIsSuccess(true);
-        setDialogMessage(response.data.message);
-        console.log(response.data.message);
-      } 
-    } catch (error) {
-      setIsSuccess(false);
-      setDialogMessage(error.response.data.message);
-    } finally {
-      setOpenDialog(true);
+    if (response.status === 201) {
+      setIsSuccess(true);
+      setDialogMessage(response.data.message);
     }
-  };
-  
+  } catch (error) {
+    setIsSuccess(false);
+    setDialogMessage(error.response.data.message);
+  } finally {
+    setOpenDialog(true);
+  }
+};
+
   return (
     <>
       <Head>
