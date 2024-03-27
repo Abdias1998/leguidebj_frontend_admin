@@ -54,8 +54,10 @@ const PaginationPage = () => {
   const [filteredData, setFilteredData] = useState([]);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDesactiveModalOpen, setIsDesactiveModalOpen] = useState(false);
+  const [isActiveModalOpen, setIsActiveModalOpen] = useState(false);
   const [videoToDelete, setVideoToDelete] = useState(null);
   const [videoToDesactive, setVideoToDesactive] = useState(null);
+  const [videoToActive, setVideoToActive] = useState(null);
   const [isInfoModalOpen, setIsInfoModalOpen] = useState(false); // État pour le modal d'informations
   const [infoMessage, setInfoMessage] = useState("");
   const [isSuccess, setIsSuccess] = useState(false); // Pour gérer le style du message d'informations
@@ -392,6 +394,10 @@ setSearchTerm(searchValue)
     setVideoToDesactive(video);
     setIsDesactiveModalOpen(true);
   };
+  const handleActiveVideo = (video) => {
+    setVideoToActive(video);
+    setIsActiveModalOpen(true);
+  };
 
   const confirmDelete = async () => {
     if (videoToDelete) {
@@ -443,12 +449,40 @@ setSearchTerm(searchValue)
       }
     }
   };
+  const confirmActive = async () => {
+    if (videoToActive) {
+      try {
+        // Envoyer une requête de suppression
+        const response = await axios.put(`${requete.admin}/active-guide/${videoToActive._id}`);
+
+        if (response.status === 200) {
+          // Suppression réussie
+          setInfoMessage("Activation réussie.");
+          setIsSuccess(true);
+        } else {
+          // Erreur de suppression
+          setInfoMessage("Erreur lors de l'activation'.");
+          setIsSuccess(false);
+        }
+      } catch (error) {
+        console.error(error);
+        setInfoMessage("Erreur lors de l'activation.");
+        setIsSuccess(false);
+      } finally {
+        setIsInfoModalOpen(true);
+        setIsActiveModalOpen(false);
+      }
+    }
+  };
 
   const cancelDelete = () => {
     setIsDeleteModalOpen(false);
   };
   const cancelDesactive = () => {
     setIsDesactiveModalOpen(false);
+  };
+  const cancelActive = () => {
+    setIsActiveModalOpen(false);
   };
 
   const closeInfoModal = () => {
@@ -502,7 +536,7 @@ setSearchTerm(searchValue)
                 <TableCell>Email</TableCell>
                 <TableCell>Supprimer</TableCell>
                 <TableCell>Modifier</TableCell>
-                <TableCell>Désactiver</TableCell>
+                <TableCell>Active/Diseable</TableCell>
                
                 <TableCell>Membre dépuis</TableCell>
 
@@ -545,7 +579,8 @@ setSearchTerm(searchValue)
                       Modifier
                     </Button>
                   </TableCell>
-                  <TableCell>
+                  {item?.is_active === true ?
+                    <TableCell>
                     <Button
                       variant="contained"
                       onClick={() => handleDesactiveVideo(item)}
@@ -553,8 +588,18 @@ setSearchTerm(searchValue)
                     >
                     Désactiver
                     </Button>
+                  </TableCell> :  <TableCell>
+                    <Button
+                      variant="contained"
+                      onClick={() => handleActiveVideo(item)}
+                      color="success"
+                    >
+                  Activer
+                    </Button>
                   </TableCell>
-
+                  }
+                 
+              
                   <TableCell>{`${ getDateInscription(item.createdAt)}`}</TableCell>
           
                   <TableCell>{item.code}</TableCell>
@@ -604,6 +649,18 @@ setSearchTerm(searchValue)
           </Button>
           <Button onClick={confirmDesactive} color="error">
             Désactiver
+          </Button>
+        </DialogActions>
+      </Dialog>
+      <Dialog open={isActiveModalOpen} onClose={cancelActive}>
+        <DialogTitle>{"Confirmer l'activation"}</DialogTitle>
+        <DialogContent>Êtes-vous sûr de vouloir activer ce guide ?</DialogContent>
+        <DialogActions>
+          <Button onClick={cancelActive} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={confirmActive} color="error">
+          Activer
           </Button>
         </DialogActions>
       </Dialog>
