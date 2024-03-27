@@ -389,7 +389,7 @@ useEffect(() => {
           <Stack spacing={3}>
             <Stack direction="row" justifyContent="space-between" spacing={4}>
               <Stack spacing={1}>
-                <Typography variant="h4">Liste des Guides</Typography>
+                <Typography variant="h4">Liste des destinations</Typography>
                 <Stack alignItems="center" direction="row" spacing={1}>
                   <Button
                     color="inherit"
@@ -413,19 +413,7 @@ useEffect(() => {
                   </Button>
                 </Stack>
               </Stack>
-              <div>
-                <Button
-                  startIcon={
-                    <SvgIcon fontSize="small">
-                      <PlusIcon />
-                    </SvgIcon>
-                  }
-                  variant="contained"
-                  onClick={() => handleSendPdf()}
-                >
-                Envoyer la liste des guides
-                </Button>
-              </div>
+             
             </Stack>
             {/* <CustomersSearch /> */}
            
