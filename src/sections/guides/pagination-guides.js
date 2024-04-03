@@ -23,13 +23,15 @@ import {
   TextField,
   Select,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import axios from "axios";
-import { requete } from "src/env/requete";
+import { getDateInscription, requete } from "src/env/requete";
 import { Scrollbar } from "src/components/scrollbar";
 
 import { Container } from "@mui/system";
-import VideoPlayer from "./customer-modified-video";
+import VideoPlayer from "../customer/customer-modified-video";
+import Link from "next/link";
 
 const initialData = [
   { id: 1, name: "Item 1" },
@@ -488,20 +490,7 @@ setSearchTerm(searchValue)
   const closeInfoModal = () => {
     setIsInfoModalOpen(false);
   };
-  function getDateInscription(createdAt) {
-    // Convertir la chaîne ISODate en objet Date
-    const date = new Date(createdAt);
 
-    // Extraire le jour, le mois et l'année de la date d'inscription
-    const day = date.getDate();
-    const month = date.getMonth() + 1; // Les mois commencent à 0, donc ajouter 1
-    const year = date.getFullYear();
-
-    // Formater la date d'inscription comme JJ/MM/AAAA
-    const formattedDate = `${day}/${month}/${year}`;
-
-    return formattedDate;
-}
 
   return (
     <div>
@@ -531,6 +520,7 @@ setSearchTerm(searchValue)
           <Table>
             <TableHead>
               <TableRow>
+             
               <TableCell>Profil</TableCell>
               <TableCell>names</TableCell>
                 <TableCell>Email</TableCell>
@@ -552,10 +542,13 @@ setSearchTerm(searchValue)
               </TableRow>
             </TableHead>
             <TableBody>
-              {paginatedData.map((item) => (
+              {paginatedData ? 
+              
+              paginatedData?.map((item) => (
                 <TableRow style={{background:item.is_active !== true ? "gray": "green"}} key={item._id}>
              
-             <TableCell>{ <Image style={{borderRadius:"100%"}} 
+         
+        <TableCell>{ <Image style={{borderRadius:"100%"}} 
       src={item.document[0]} decoding="async" loading="lazy" data-nimg="1"
       alt="Picture of the author"
       width={50} 
@@ -563,7 +556,8 @@ setSearchTerm(searchValue)
       // blurDataURL="data:..." automatically provided
       // placeholder="blur" // Optional blur-up while loading
     />}</TableCell>
-             <TableCell>{item.names}</TableCell>
+    
+             <TableCell> <Link style={{textDecoration:'none'}} href={`guides/${item._id}`}> {item.names}</Link></TableCell>
                   <TableCell>{item.email}</TableCell>
                   <TableCell>
                     <Button
@@ -612,7 +606,7 @@ setSearchTerm(searchValue)
                   <TableCell>{truncate(item.description, 50)}</TableCell>
                   <TableCell>{item._id}</TableCell>
                 </TableRow>
-              ))}
+              )) :    <CircularProgress sx={{ mt: 3 }} color="secondary" />}
             </TableBody>
           </Table>
           <TablePagination

@@ -40,7 +40,7 @@ import { CustomersTable } from "src/sections/customer/customers-table";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { applyPagination } from "src/utils/apply-pagination";
 import CoverImageForm from "src/sections/customer/customer-validate";
-import PaginationCard from "src/sections/customer/PaginationCard";
+import PaginationCard from "src/sections/guides/pagination-guides";
 import { requete } from "src/env/requete";
 import CardDestination from "src/sections/destination/card-destination";
 

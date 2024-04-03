@@ -19,6 +19,7 @@ import {
   SvgIcon,
   Select,
   MenuItem,
+  CircularProgress,
 } from "@mui/material";
 import Head from "next/head";
 import { subDays, subHours } from "date-fns";
@@ -40,8 +41,9 @@ import { CustomersTable } from "src/sections/customer/customers-table";
 import { CustomersSearch } from "src/sections/customer/customers-search";
 import { applyPagination } from "src/utils/apply-pagination";
 import CoverImageForm from "src/sections/customer/customer-validate";
-import PaginationCard from "src/sections/customer/PaginationCard";
+import PaginationCard from "src/sections/guides/pagination-guides";
 import { requete } from "src/env/requete";
+import GuidesChart from "src/sections/guides/stats-guides";
 
 const now = new Date();
 
@@ -264,6 +266,7 @@ const Page = () => {
   const customers = useCustomers(page, rowsPerPage);
   const customersIds = useCustomerIds(customers);
   const customersSelection = useSelection(customersIds);
+  const [loading,setLoading] = useState(false)
 
 
   const handlePageChange = useCallback((event, value) => {
@@ -327,7 +330,7 @@ const handleSendPdf =async () =>{
 }
 const handleSubmit = async (e) => {
   e.preventDefault();
-
+setLoading(true)
   const form = new FormData();
   for (const key in formData) {
     if (Array.isArray(formData[key])) {
@@ -347,12 +350,15 @@ const handleSubmit = async (e) => {
     if (response.status === 201) {
       setIsSuccess(true);
       setDialogMessage(response.data.message);
+      setLoading(false)
     }
   } catch (error) {
     setIsSuccess(false);
     setDialogMessage(error.response.data.message);
+    setLoading(false)
   } finally {
     setOpenDialog(true);
+    setLoading(false)
   }
 };
 
@@ -411,7 +417,7 @@ const handleSubmit = async (e) => {
               </div>
             </Stack>
             {/* <CustomersSearch /> */}
-           
+           <GuidesChart />
             <PaginationCard />
             {/* <CustomersTable
               // count={data.length}
@@ -439,6 +445,7 @@ const handleSubmit = async (e) => {
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
+                    required
                   />
                 </Grid>
 
@@ -448,7 +455,8 @@ const handleSubmit = async (e) => {
                     label="Prénom"
                     name="lastName"
                     value={formData.lastName}
-                    onChange={handleInputChange}
+                    onChange={handleInputChange} 
+                     required
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -458,6 +466,7 @@ const handleSubmit = async (e) => {
                     name="email"
                     value={formData.email}
                     onChange={handleInputChange}
+                    required
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -466,7 +475,9 @@ const handleSubmit = async (e) => {
                     label="Tel"
                     name="tel"
                     value={formData.tel}
-                    onChange={handleInputChange}
+                    onChange={handleInputChange
+                    }
+                    required
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -476,6 +487,7 @@ const handleSubmit = async (e) => {
           name="country"
           value={formData.country}
           onChange={handleInputChange}
+          required
         >
           {africanCountries.map((country) => (
             <MenuItem key={country} value={country}>
@@ -491,6 +503,7 @@ const handleSubmit = async (e) => {
                     name="zone"
                     value={formData.zone}
                     onChange={handleInputChange}
+                    required
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -500,6 +513,7 @@ const handleSubmit = async (e) => {
                     name="language"
                     value={formData.language}
                     onChange={handleInputChange}
+                    required
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -509,6 +523,7 @@ const handleSubmit = async (e) => {
                     name="experience"
                     value={formData.experience}
                     onChange={handleInputChange}
+                    required
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -518,6 +533,7 @@ const handleSubmit = async (e) => {
                     name="available"
                     value={formData.available }
                     onChange={handleInputChange}
+                    required
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -529,6 +545,7 @@ const handleSubmit = async (e) => {
                     onChange={handleInputChange}
                     multiline
                     rows={4}
+                    required
                   />
                 </Grid>
                 <Grid item xs={6}>
@@ -538,6 +555,7 @@ const handleSubmit = async (e) => {
                     name="document"
                     onChange={handleFileChange}
                     multiple
+                    required
                   />
                 </Grid>
                 {/* <Grid item xs={6}>
@@ -549,9 +567,15 @@ const handleSubmit = async (e) => {
                   />
                 </Grid> */}
                 <Grid item xs={12}>
+                
+
+                  {loading ? (
+                  <CircularProgress sx={{ mt: 3 }} color="primary" />
+                ) : (
                   <Button type="submit" variant="contained" color="primary">
-                    Créer un guide
-                  </Button>
+                  Créer un guide
+                </Button>
+                )}
                 </Grid>
               </Grid>
             </form>
